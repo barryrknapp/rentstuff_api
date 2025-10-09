@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<changeSet id="1.0" author="bknapp">
+		<!-- Sequences for all entities -->
+		<createSequence sequenceName="hibernate_sequence"
+			startValue="1" incrementBy="1" />
+		<createSequence sequenceName="user_id_seq"
+			startValue="1" incrementBy="1" />
+		<createSequence sequenceName="nft_id_seq"
+			startValue="1" incrementBy="1" />
+		<createSequence sequenceName="booking_id_seq"
+			startValue="1" incrementBy="1" />
+		<createSequence sequenceName="payment_id_seq"
+			startValue="1" incrementBy="1" />
+		<createSequence sequenceName="review_item_id_seq"
+			startValue="1" incrementBy="1" />
+		<createSequence sequenceName="review_user_id_seq"
+			startValue="1" incrementBy="1" />
+		<createSequence sequenceName="config_id_seq"
+			startValue="1" incrementBy="1" />
+		<createSequence sequenceName="taxonomy_id_seq"
+			startValue="1" incrementBy="1" />
+
+		<!-- USER table -->
+		<createTable tableName="USER_DETAIL">
+			<column name="ID" type="BIGINT">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="EMAIL" type="VARCHAR(255)">
+				<constraints nullable="false" unique="true" />
+			</column>
+			<column name="PASSWORD" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="FIRST_NAME" type="VARCHAR(255)" />
+			<column name="LAST_NAME" type="VARCHAR(255)" />
+			<column name="CREATE_DATE" type="TIMESTAMP WITH TIME ZONE" />
+			<column name="MODIFY_DATE" type="TIMESTAMP WITH TIME ZONE" />
+			<column name="ROLE" type="VARCHAR(50)" />
+		</createTable>
+
+		<!-- RENTAL_ITEM table -->
+		<createTable tableName="RENTAL_ITEM">
+			<column name="ID" type="BIGINT">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="NAME" type="VARCHAR(255)" />
+			<column name="IMAGE_URL" type="VARCHAR(1024)" />
+			<column name="DESC" type="VARCHAR(255)" />
+			<column name="PRICE" type="DOUBLE PRECISION" />
+			<column name="CREATE_DATE" type="TIMESTAMP WITH TIME ZONE" />
+			<column name="MODIFY_DATE" type="TIMESTAMP WITH TIME ZONE" />
+			<column name="OWNER_ID" type="BIGINT">
+				<constraints nullable="false"
+					foreignKeyName="fk_rental_item_owner" references="USER_DETAIL(ID)" />
+			</column>
+		</createTable>
+
+		<!-- BOOKING table -->
+		<createTable tableName="BOOKING">
+			<column name="ID" type="BIGINT">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="ITEM_ID" type="BIGINT">
+				<constraints nullable="false"
+					foreignKeyName="fk_booking_item" references="RENTAL_ITEM(ID)" />
+			</column>
+			<column name="USER_ID" type="BIGINT">
+				<constraints nullable="false"
+					foreignKeyName="fk_booking_user" references="USER_DETAIL(ID)" />
+			</column>
+			<column name="START_DATE" type="TIMESTAMP WITH TIME ZONE">
+				<constraints nullable="false" />
+			</column>
+			<column name="END_DATE" type="TIMESTAMP WITH TIME ZONE">
+				<constraints nullable="false" />
+			</column>
+			<column name="STATUS" type="VARCHAR(50)" />
+			<column name="CREATE_DATE" type="TIMESTAMP WITH TIME ZONE" />
+			<column name="MODIFY_DATE" type="TIMESTAMP WITH TIME ZONE" />
+		</createTable>
+
+		<!-- PAYMENT table -->
+		<createTable tableName="PAYMENT">
+			<column name="ID" type="BIGINT">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="BOOKING_ID" type="BIGINT">
+				<constraints nullable="false"
+					foreignKeyName="fk_payment_booking" references="BOOKING(ID)" />
+			</column>
+			<column name="AMOUNT" type="DOUBLE PRECISION">
+				<constraints nullable="false" />
+			</column>
+			<column name="STATUS" type="VARCHAR(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="PAYMENT_METHOD" type="VARCHAR(50)" />
+			<column name="TRANSACTION_ID" type="VARCHAR(255)" />
+			<column name="CREATE_DATE" type="TIMESTAMP WITH TIME ZONE" />
+			<column name="MODIFY_DATE" type="TIMESTAMP WITH TIME ZONE" />
+		</createTable>
+
+		<!-- REVIEW_ITEM table -->
+		<createTable tableName="REVIEW_ITEM">
+			<column name="ID" type="BIGINT">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="ITEM_ID" type="BIGINT">
+				<constraints nullable="false"
+					foreignKeyName="fk_review_item_item" references="RENTAL_ITEM(ID)" />
+			</column>
+			<column name="REVIEWER_ID" type="BIGINT">
+				<constraints nullable="false"
+					foreignKeyName="fk_review_item_reviewer" references="USER_DETAIL(ID)" />
+			</column>
+			<column name="RATING" type="INTEGER">
+				<constraints nullable="false" />
+			</column>
+			<column name="COMMENT" type="VARCHAR(1000)" />
+			<column name="CREATE_DATE" type="TIMESTAMP WITH TIME ZONE" />
+			<column name="MODIFY_DATE" type="TIMESTAMP WITH TIME ZONE" />
+		</createTable>
+
+		<!-- REVIEW_USER table -->
+		<createTable tableName="REVIEW_USER">
+			<column name="ID" type="BIGINT">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="REVIEWED_USER_ID" type="BIGINT">
+				<constraints nullable="false"
+					foreignKeyName="fk_review_user_reviewed" references="USER_DETAIL(ID)" />
+			</column>
+			<column name="REVIEWER_ID" type="BIGINT">
+				<constraints nullable="false"
+					foreignKeyName="fk_review_user_reviewer" references="USER_DETAIL(ID)" />
+			</column>
+			<column name="RATING" type="INTEGER">
+				<constraints nullable="false" />
+			</column>
+			<column name="COMMENT" type="VARCHAR(1000)" />
+			<column name="CREATE_DATE" type="TIMESTAMP WITH TIME ZONE" />
+			<column name="MODIFY_DATE" type="TIMESTAMP WITH TIME ZONE" />
+		</createTable>
+
+		<!-- CONFIG table -->
+		<createTable tableName="CONFIG">
+			<column name="ID" type="BIGINT">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="KEY" type="VARCHAR(100)">
+				<constraints nullable="false" unique="true" />
+			</column>
+			<column name="VALUE" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATE_DATE" type="TIMESTAMP WITH TIME ZONE" />
+			<column name="MODIFY_DATE" type="TIMESTAMP WITH TIME ZONE" />
+		</createTable>
+
+		<!-- TAXONOMY table -->
+		<createTable tableName="TAXONOMY">
+			<column name="ID" type="BIGINT">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="NAME" type="VARCHAR(100)">
+				<constraints nullable="false" />
+			</column>
+			<column name="PARENT_ID" type="BIGINT">
+				<constraints foreignKeyName="fk_taxonomy_parent"
+					references="TAXONOMY(ID)" />
+			</column>
+			<column name="CREATE_DATE" type="TIMESTAMP WITH TIME ZONE" />
+			<column name="MODIFY_DATE" type="TIMESTAMP WITH TIME ZONE" />
+		</createTable>
+
+		<!-- RENTAL_ITEM_TAXONOMY join table -->
+		<createTable tableName="RENTAL_ITEM_TAXONOMY">
+			<column name="ITEM_ID" type="BIGINT">
+				<constraints nullable="false"
+					foreignKeyName="fk_rit_item" references="RENTAL_ITEM(ID)" />
+			</column>
+			<column name="TAXONOMY_ID" type="BIGINT">
+				<constraints nullable="false"
+					foreignKeyName="fk_rit_taxonomy" references="TAXONOMY(ID)" />
+			</column>
+		</createTable>
+
+		<!-- CONFIG initial data -->
+		<insert tableName="CONFIG">
+			<column name="ID" valueComputed="nextval('config_id_seq')" />
+			<column name="KEY" value="SITE_NAME" />
+			<column name="VALUE" value="RentStuff" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="CONFIG">
+			<column name="ID" valueComputed="nextval('config_id_seq')" />
+			<column name="KEY" value="MAX_BOOKING_DAYS" />
+			<column name="VALUE" value="7" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="CONFIG">
+			<column name="ID" valueComputed="nextval('config_id_seq')" />
+			<column name="KEY" value="CURRENCY" />
+			<column name="VALUE" value="USD" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="CONFIG">
+			<column name="ID" valueComputed="nextval('config_id_seq')" />
+			<column name="KEY" value="ENABLE_ITEM_REVIEWS" />
+			<column name="VALUE" value="true" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="CONFIG">
+			<column name="ID" valueComputed="nextval('config_id_seq')" />
+			<column name="KEY" value="ENABLE_USER_REVIEWS" />
+			<column name="VALUE" value="true" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="CONFIG">
+			<column name="ID" valueComputed="nextval('config_id_seq')" />
+			<column name="KEY" value="SMTP_HOST" />
+			<column name="VALUE" value="smtp.gmail.com" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="CONFIG">
+			<column name="ID" valueComputed="nextval('config_id_seq')" />
+			<column name="KEY" value="MAX_TAXONOMY_DEPTH" />
+			<column name="VALUE" value="3" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="CONFIG">
+			<column name="ID" valueComputed="nextval('config_id_seq')" />
+			<column name="KEY" value="MIN_PASSWORD_LENGTH" />
+			<column name="VALUE" value="8" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="CONFIG">
+			<column name="ID" valueComputed="nextval('config_id_seq')" />
+			<column name="KEY" value="JWT_SECRET" />
+			<column name="VALUE" value="4Wn8VZZUT8ZuDJ/XX8XIqg4y2j3Gwx+slyB/K73Z0L5mMCa6EbeM5o3dhAv5ZAasj+5Q9sBHPdqaqgckkNMkJQ==" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="CONFIG">
+			<column name="ID" valueComputed="nextval('config_id_seq')" />
+			<column name="KEY" value="STRIPE_API_KEY" />
+			<column name="VALUE" value="sk_test_..." /> <!-- Your test key -->
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="CONFIG">
+			<column name="ID" valueComputed="nextval('config_id_seq')" />
+			<column name="KEY" value="DATE_FORMAT" />
+			<column name="VALUE" value="yyyy-MM-dd'T'HH:mm:ss" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<!-- TAXONOMY initial data -->
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Electronics" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Cameras" />
+			<column name="PARENT_ID"
+				valueComputed="currval('taxonomy_id_seq') - 1" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="DSLR" />
+			<column name="PARENT_ID"
+				valueComputed="currval('taxonomy_id_seq') - 1" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Tools" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+
+		<!-- causing schema error -->
+		<createIndex indexName="idx_rit_taxonomy"
+			tableName="RENTAL_ITEM_TAXONOMY">
+			<column name="TAXONOMY_ID" />
+		</createIndex>
+
+		<createIndex indexName="idx_taxonomy_parent"
+			tableName="TAXONOMY">
+			<column name="PARENT_ID" />
+		</createIndex>
+
+	</changeSet>
+
+</databaseChangeLog>

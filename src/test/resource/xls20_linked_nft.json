@@ -1,0 +1,30 @@
+{
+  "$schema": "https://strategyengine.one/schema/20220913/v1/nft.schema.json",
+  "nftType": "nftlinks.v1",
+  "name": "Delicious Apple Pie",
+  "description": "A handcrafted apple pie, bursting with fresh flavors.",
+  "creator":"strategyengine.one",
+  "image": "ipfs://bafybeidlkqhddsjr7xowa5aug5zp55bk543t527542543gf5433...",
+  "isExplicit":false,
+  "externalUrl":"https://strategyengine.one",
+  "image_url":"ipfs://bafybeidlkqhddsjr7xowa5aug5zp55bk543t527542543gf5433...",
+  "collection":{"name":"business name","family":"product name"},
+  "attributes": [
+    {
+      "trait_type": "nftlink_tokenid",
+      "value": "000A1198511569DD226DFBE9472AC240000FCA5F212289F42669153E00000030",
+      "description": "Ingredient"
+    },
+    {
+      "trait_type": "nftlink_tokenid",
+      "value": "000A1198511569DD226DFBE9472AC240000FCA5F212289F42669153E00000031",
+      "description": "Ingredient"
+    },
+    {
+      "trait_type": "expire date",
+      "value": "05/25/2025",
+      "description": "MM/dd/yyyy"
+    }
+  ]
+}
+
