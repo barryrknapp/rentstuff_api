@@ -50,7 +50,7 @@
 			</column>
 			<column name="NAME" type="VARCHAR(255)" />
 			<column name="IMAGE_URL" type="VARCHAR(1024)" />
-			<column name="DESC" type="VARCHAR(255)" />
+			<column name="DESCRIPTION" type="VARCHAR(1024)" />
 			<column name="PRICE" type="DOUBLE PRECISION" />
 			<column name="CREATE_DATE" type="TIMESTAMP WITH TIME ZONE" />
 			<column name="MODIFY_DATE" type="TIMESTAMP WITH TIME ZONE" />
@@ -237,12 +237,6 @@
 			<column name="ID" valueComputed="nextval('config_id_seq')" />
 			<column name="KEY" value="MIN_PASSWORD_LENGTH" />
 			<column name="VALUE" value="8" />
-			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
-		</insert>
-		<insert tableName="CONFIG">
-			<column name="ID" valueComputed="nextval('config_id_seq')" />
-			<column name="KEY" value="JWT_SECRET" />
-			<column name="VALUE" value="4Wn8VZZUT8ZuDJ/XX8XIqg4y2j3Gwx+slyB/K73Z0L5mMCa6EbeM5o3dhAv5ZAasj+5Q9sBHPdqaqgckkNMkJQ==" />
 			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
 		</insert>
 		<insert tableName="CONFIG">

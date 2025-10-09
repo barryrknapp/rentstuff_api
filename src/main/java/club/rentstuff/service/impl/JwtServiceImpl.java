@@ -8,7 +8,9 @@ import java.util.Date;
 
 import javax.crypto.SecretKey;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import club.rentstuff.entity.UserEntity;
@@ -25,13 +27,13 @@ public class JwtServiceImpl implements JwtService {
 
     @Autowired
     private ConfigService configService;
+    
+	@Value("${rentstuff.jwt.secret}")
+	private String jwtSecret;
 
     @Override
     public String generateToken(UserEntity user) {
     	
-    	SecretKey key = Jwts.SIG.HS512.key().build(); // or .generate(); check your JJWT version
-    	String base64 = Base64.getEncoder().encodeToString(key.getEncoded());
-    	System.out.println("Calculate JWT Key:" + base64);
     	
         return Jwts.builder()
                 .subject(user.getEmail())
@@ -71,7 +73,7 @@ public class JwtServiceImpl implements JwtService {
     }
 
     private SecretKey getSigningKey() {  // ✅ changed Key -> SecretKey
-        String secret = configService.getConfig("JWT_SECRET");
+        String secret = jwtSecret;
         if (secret == null || secret.length() < 32) {
             throw new IllegalArgumentException("JWT_SECRET must be at least 32 characters long");
         }
