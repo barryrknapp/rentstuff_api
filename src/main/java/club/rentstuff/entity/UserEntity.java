@@ -68,4 +68,18 @@ public class UserEntity {
 
     @Column(name = "ROLE")
     private String role; // e.g., USER, ADMIN
+    
+    
+    public List<RentalItemEntity> getRentalItems() {
+        return rentalItems!=null? rentalItems: new ArrayList<>();
+    }
+    
+    public List<BookingEntity> getBookings() {
+        return bookings!=null? bookings: new ArrayList<>();
+    }
+    
+    public List<ReviewUserEntity> getReviews() {
+        return reviews!=null? reviews: new ArrayList<>();
+    }
+    
 }

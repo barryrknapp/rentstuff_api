@@ -2,7 +2,6 @@ package club.rentstuff.model;
 
 import java.time.LocalDateTime;
 
-import club.rentstuff.model.PaymentIntentDto.PaymentIntentDtoBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -18,13 +17,13 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
-public class UserDto {
+public class RentalItemImageDto {
 	private Long id;
-    private String email;
-    private String password;
-    private String firstName;
-    private String lastName;
-    private String role;
-    private LocalDateTime createDate;
-    private LocalDateTime modifyDate;
+	private Long rentalItemId;
+
+	private String imageUrl;
+
+	private LocalDateTime createDate;
+
+	private LocalDateTime modifyDate;
 }

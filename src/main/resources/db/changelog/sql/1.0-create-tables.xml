@@ -10,7 +10,7 @@
 			startValue="1" incrementBy="1" />
 		<createSequence sequenceName="user_id_seq"
 			startValue="1" incrementBy="1" />
-		<createSequence sequenceName="nft_id_seq"
+		<createSequence sequenceName="rental_item_id_seq"
 			startValue="1" incrementBy="1" />
 		<createSequence sequenceName="booking_id_seq"
 			startValue="1" incrementBy="1" />
@@ -24,6 +24,14 @@
 			startValue="1" incrementBy="1" />
 		<createSequence sequenceName="taxonomy_id_seq"
 			startValue="1" incrementBy="1" />
+		<createSequence sequenceName="price_id_seq"
+			startValue="1" incrementBy="1" />
+		<createSequence sequenceName="unavailable_date_id_seq"
+			startValue="1" incrementBy="1" />
+		<createSequence sequenceName="rental_item_image_id_seq"
+			startValue="1" incrementBy="1" />
+
+
 
 		<!-- USER table -->
 		<createTable tableName="USER_DETAIL">
@@ -48,16 +56,32 @@
 			<column name="ID" type="BIGINT">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
+			<column name="MIN_DAYS" type="INTEGER" />
+			<column name="MAX_DAYS" type="INTEGER" />
+
 			<column name="NAME" type="VARCHAR(255)" />
-			<column name="IMAGE_URL" type="VARCHAR(1024)" />
 			<column name="DESCRIPTION" type="VARCHAR(1024)" />
-			<column name="PRICE" type="DOUBLE PRECISION" />
 			<column name="CREATE_DATE" type="TIMESTAMP WITH TIME ZONE" />
 			<column name="MODIFY_DATE" type="TIMESTAMP WITH TIME ZONE" />
 			<column name="OWNER_ID" type="BIGINT">
 				<constraints nullable="false"
 					foreignKeyName="fk_rental_item_owner" references="USER_DETAIL(ID)" />
 			</column>
+		</createTable>
+
+		<!-- PRICING table -->
+		<createTable tableName="PRICE_PER_DAY">
+			<column name="ID" type="BIGINT">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="ITEM_ID" type="BIGINT">
+				<constraints nullable="false"
+					foreignKeyName="fk_price_item" references="RENTAL_ITEM(ID)" />
+			</column>
+			<column name="PRICE" type="DOUBLE PRECISION" />
+			<column name="MIN_DAYS" type="INTEGER" />
+			<column name="CREATE_DATE" type="TIMESTAMP WITH TIME ZONE" />
+			<column name="MODIFY_DATE" type="TIMESTAMP WITH TIME ZONE" />
 		</createTable>
 
 		<!-- BOOKING table -->
@@ -116,7 +140,8 @@
 			</column>
 			<column name="REVIEWER_ID" type="BIGINT">
 				<constraints nullable="false"
-					foreignKeyName="fk_review_item_reviewer" references="USER_DETAIL(ID)" />
+					foreignKeyName="fk_review_item_reviewer"
+					references="USER_DETAIL(ID)" />
 			</column>
 			<column name="RATING" type="INTEGER">
 				<constraints nullable="false" />
@@ -133,16 +158,38 @@
 			</column>
 			<column name="REVIEWED_USER_ID" type="BIGINT">
 				<constraints nullable="false"
-					foreignKeyName="fk_review_user_reviewed" references="USER_DETAIL(ID)" />
+					foreignKeyName="fk_review_user_reviewed"
+					references="USER_DETAIL(ID)" />
 			</column>
 			<column name="REVIEWER_ID" type="BIGINT">
 				<constraints nullable="false"
-					foreignKeyName="fk_review_user_reviewer" references="USER_DETAIL(ID)" />
+					foreignKeyName="fk_review_user_reviewer"
+					references="USER_DETAIL(ID)" />
 			</column>
 			<column name="RATING" type="INTEGER">
 				<constraints nullable="false" />
 			</column>
 			<column name="COMMENT" type="VARCHAR(1000)" />
+			<column name="CREATE_DATE" type="TIMESTAMP WITH TIME ZONE" />
+			<column name="MODIFY_DATE" type="TIMESTAMP WITH TIME ZONE" />
+		</createTable>
+
+
+		<createTable tableName="UNAVAILABLE_DATES">
+			<column name="ID" type="BIGINT">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="RENTAL_ITEM_ID" type="INTEGER">
+				<constraints nullable="false"
+					foreignKeyName="fk_unavailable_dates_rental_item"
+					references="RENTAL_ITEM(ID)" />
+			</column>
+			<column name="START_DATE" type="DATE">
+				<constraints nullable="false" />
+			</column>
+			<column name="END_DATE" type="DATE">
+				<constraints nullable="false" />
+			</column>
 			<column name="CREATE_DATE" type="TIMESTAMP WITH TIME ZONE" />
 			<column name="MODIFY_DATE" type="TIMESTAMP WITH TIME ZONE" />
 		</createTable>
@@ -177,6 +224,23 @@
 			<column name="CREATE_DATE" type="TIMESTAMP WITH TIME ZONE" />
 			<column name="MODIFY_DATE" type="TIMESTAMP WITH TIME ZONE" />
 		</createTable>
+
+		<createTable tableName="RENTAL_ITEM_IMAGE">
+			<column name="ID" type="BIGINT">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="RENTAL_ITEM_ID" type="BIGINT">
+				<constraints nullable="false"
+					foreignKeyName="fk_rental_item_image_item"
+					references="RENTAL_ITEM(ID)" />
+			</column>
+			<column name="IMAGE_URL" type="VARCHAR(1024)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATE_DATE" type="TIMESTAMP WITH TIME ZONE" />
+			<column name="MODIFY_DATE" type="TIMESTAMP WITH TIME ZONE" />
+		</createTable>
+
 
 		<!-- RENTAL_ITEM_TAXONOMY join table -->
 		<createTable tableName="RENTAL_ITEM_TAXONOMY">

@@ -14,6 +14,7 @@ import com.stripe.model.PaymentIntent;
 
 import club.rentstuff.entity.BookingEntity;
 import club.rentstuff.entity.PaymentEntity;
+import club.rentstuff.model.PaymentStatus;
 import club.rentstuff.repo.PaymentRepo;
 import club.rentstuff.service.ConfigService;
 import club.rentstuff.service.PaymentService;
@@ -45,7 +46,7 @@ public class PaymentServiceImpl implements PaymentService {
         PaymentEntity payment = PaymentEntity.builder()
             .booking(BookingEntity.builder().id(bookingId).build())
             .amount(amount)
-            .status(PaymentEntity.PaymentStatus.PROCESSING)
+            .status(PaymentStatus.PROCESSING)
             .transactionId(intent.getId()) // Use intent.getId() directly
             .paymentMethod("CARD")
             .createDate(LocalDateTime.now())

@@ -18,13 +18,19 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
-public class UserDto {
+public class ReviewUserDto {
+
 	private Long id;
-    private String email;
-    private String password;
-    private String firstName;
-    private String lastName;
-    private String role;
-    private LocalDateTime createDate;
-    private LocalDateTime modifyDate;
+
+	private Long reviewedUserId;
+
+	private Long reviewerUserId;
+
+	private Integer rating; // 1-5 stars
+
+	private String comment;
+
+	private LocalDateTime createDate;
+
+	private LocalDateTime modifyDate;
 }

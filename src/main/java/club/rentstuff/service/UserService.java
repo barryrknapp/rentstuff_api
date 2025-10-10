@@ -10,5 +10,5 @@ public interface UserService {
 
 	UserDto signUp(UserDto userDto);
 
-	UserDto loadUserByUsername(String email) throws UsernameNotFoundException;
+	UserDto getUserByEmail(String email) throws UsernameNotFoundException;
 }

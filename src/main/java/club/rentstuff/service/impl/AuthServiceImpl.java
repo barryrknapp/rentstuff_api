@@ -1,6 +1,10 @@
 package club.rentstuff.service.impl;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +23,7 @@ public class AuthServiceImpl implements AuthService {
     
     @Autowired
     private JwtService jwtService;
+    
 
     @Override
     public String login(String email, String password) {
@@ -28,6 +33,15 @@ public class AuthServiceImpl implements AuthService {
             throw new IllegalArgumentException("Invalid credentials");
         }
         return jwtService.generateToken(user);
+    }
+    
+    @Override
+    public Optional<UserEntity> getLoggedInUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    String email = authentication.getName();
+	    return userRepository.findByEmail(email);
+	    
+    	
     }
     
     

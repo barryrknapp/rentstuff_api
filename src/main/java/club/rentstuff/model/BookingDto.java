@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import club.rentstuff.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -19,26 +20,17 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
-public class RentalItemDto {
+public class BookingDto {
 	private Long id;
-	private String name;
-	
-	@Builder.Default
-	private List<String> imageUrls = new ArrayList<>();
-	private String description;
-	
-	@Builder.Default
-	private List<PriceDto> prices = new ArrayList<>();
-    private Integer minDays;
-    private Integer maxDays;
+	private Long itemId;
+	private Long userId;
+	private UserEntity renter;
+	private LocalDateTime startDate;
+	private LocalDateTime endDate;
+	private String status; // e.g., PENDING, CONFIRMED, CANCELLED
+
 	private LocalDateTime createDate;
 	private LocalDateTime modifyDate;
-	private Long ownerId;
-	
 	@Builder.Default
-	private List<Long> taxonomyIds = new ArrayList<>();
-	private Double averageRating; // Optional: Computed from reviews
-    
-	@Builder.Default
-	private List<UnavailableDateDto> unavailableDates = new ArrayList<>();
+	private List<PaymentDto> payments = new ArrayList<>();
 }

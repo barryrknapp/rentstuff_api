@@ -6,10 +6,14 @@ import club.rentstuff.model.RentalItemDto;
 
 public interface RentalItemService {
 
-	RentalItemDto getById(Integer id);
+	RentalItemDto getById(Long id);
 
 	List<RentalItemDto> findByTaxonomyId(Long taxonomyId);
 
-	RentalItemDto getItemForBooking(Long itemId);
+	RentalItemDto update(Long id, RentalItemDto dto);
+
+	RentalItemDto create(RentalItemDto dto);
+
+	List<RentalItemDto> getAll();
 
 }

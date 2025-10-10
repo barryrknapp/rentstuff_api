@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import club.rentstuff.entity.BookingEntity;
+import club.rentstuff.model.BookingDto;
 import club.rentstuff.service.BookingService;
 
 @RestController
-@RequestMapping("/api/bookings")
+@RequestMapping("/bookings")
 public class BookingController {
 
     @Autowired
@@ -39,8 +40,8 @@ public class BookingController {
 
     @PreAuthorize("isAuthenticated()") 
     @PostMapping
-    public ResponseEntity<BookingEntity> createBooking(@RequestBody BookingRequest request) {
-        BookingEntity booking = bookingService.createBooking(
+    public ResponseEntity<BookingDto> createBooking(@RequestBody BookingRequest request) {
+        BookingDto booking = bookingService.createBooking(
             request.getItemId(),
             request.getUserId(),
             request.getStartDate(),

@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import club.rentstuff.entity.TaxonomyEntity;
+import club.rentstuff.model.TaxonomyDto;
 import club.rentstuff.repo.TaxonomyRepo;
 import club.rentstuff.service.ConfigService;
+import club.rentstuff.service.ConversionService;
 import club.rentstuff.service.TaxonomyService;
 
 @Service
@@ -19,8 +21,11 @@ public class TaxonomyServiceImpl implements TaxonomyService {
 	@Autowired
 	private TaxonomyRepo taxonomyRepository;
 
+	@Autowired
+	private ConversionService conversionService;
+
 	@Override
-	public TaxonomyEntity createTaxonomy(String name, Long parentId) {
+	public TaxonomyDto createTaxonomy(String name, Long parentId) {
 		if (parentId != null) {
 			int maxDepth = Integer.parseInt(configService.getConfig("MAX_TAXONOMY_DEPTH"));
 			int depth = getTaxonomyDepth(parentId);
@@ -43,12 +48,19 @@ public class TaxonomyServiceImpl implements TaxonomyService {
 		return depth;
 	}
 
-	public List<String> getTaxonomyNames(List<Long> taxonomyIds) {
-		return taxonomyRepository.findAllById(taxonomyIds).stream().map(TaxonomyEntity::getName)
+	@Override
+	public List<TaxonomyDto> getTaxonomies(List<Long> taxonomyIds) {
+		if (taxonomyIds.isEmpty()) {
+			return getAll();
+		}
+		return taxonomyRepository.findAllById(taxonomyIds).stream().map(t -> conversionService.convertTaxonomyEntity(t))
 				.collect(Collectors.toList());
 	}
-	
 
-		
+	@Override
+	public List<TaxonomyDto> getAll() {
+		return taxonomyRepository.findAll().stream().map(t -> conversionService.convertTaxonomyEntity(t))
+				.collect(Collectors.toList());
+	}
 
 }

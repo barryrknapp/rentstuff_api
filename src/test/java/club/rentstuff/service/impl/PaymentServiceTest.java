@@ -12,6 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import com.stripe.exception.StripeException;
 
 import club.rentstuff.entity.PaymentEntity;
+import club.rentstuff.model.PaymentStatus;
 import club.rentstuff.service.ConfigService;
 import club.rentstuff.service.PaymentService;
 
@@ -28,7 +29,7 @@ public class PaymentServiceTest {
 		when(configService.getConfig("CURRENCY")).thenReturn("usd");
 
 		PaymentEntity payment = paymentService.initiatePayment(1L, 50.0);
-		assertEquals(PaymentEntity.PaymentStatus.PROCESSING, payment.getStatus());
+		assertEquals(PaymentStatus.PROCESSING, payment.getStatus());
 		assertNotNull(payment.getTransactionId());
 	}
 }

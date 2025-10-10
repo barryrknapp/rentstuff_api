@@ -2,6 +2,9 @@ package club.rentstuff.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +15,7 @@ import club.rentstuff.service.AuthService;
 import club.rentstuff.service.UserService;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class AuthController {
 
     @Autowired
@@ -27,9 +30,18 @@ public class AuthController {
         return ResponseEntity.ok(token);
     }
     
-    @PostMapping("/signup")
-    public ResponseEntity<UserDto> signUp(@RequestBody UserDto userDto) {
+    @PostMapping("/register")
+    public ResponseEntity<String> signUp(@RequestBody UserDto userDto) {
         UserDto user = userService.signUp(userDto);
-        return ResponseEntity.ok(user);
+        return login(userDto);
+    }
+    
+    @GetMapping("/me")
+    public ResponseEntity<UserDto> getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName(); // Email from JWT
+        UserDto userDto = userService.getUserByEmail(email);
+        return ResponseEntity.ok(userDto);
     }
 }
+

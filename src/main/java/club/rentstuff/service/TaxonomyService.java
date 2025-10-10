@@ -1,9 +1,15 @@
 package club.rentstuff.service;
 
-import club.rentstuff.entity.TaxonomyEntity;
+import java.util.List;
+
+import club.rentstuff.model.TaxonomyDto;
 
 public interface TaxonomyService {
 
-	TaxonomyEntity createTaxonomy(String name, Long parentId);
+	TaxonomyDto createTaxonomy(String name, Long parentId);
+
+	List<TaxonomyDto> getAll();
+
+	List<TaxonomyDto> getTaxonomies(List<Long> taxonomyIds);
 
 }

@@ -11,6 +11,7 @@ import club.rentstuff.entity.UserEntity;
 import club.rentstuff.model.UserDto;
 import club.rentstuff.repo.UserRepo;
 import club.rentstuff.service.ConfigService;
+import club.rentstuff.service.ConversionService;
 import club.rentstuff.service.UserService;
 
 @Service
@@ -24,6 +25,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private ConfigService configService;
+	
+	@Autowired
+	private ConversionService conversionService;
 
 	@Override
 	public UserDto signUp(UserDto userDto) {
@@ -57,11 +61,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserDto loadUserByUsername(String email) throws UsernameNotFoundException {
+	public UserDto getUserByEmail(String email) throws UsernameNotFoundException {
 		UserEntity user = userRepository.findByEmail(email)
 				.orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
-		return UserDto.builder().email(user.getEmail()).password(user.getPassword())
-				.role(user.getRole().replace("ROLE_", "")).build();
+		return conversionService.convertUserEntity(user);
 	}
 
 }

@@ -67,6 +67,12 @@ public class BookingEntity {
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<PaymentEntity> payments = new ArrayList<>();
     
+
+
+    public List<PaymentEntity> getPayments() {
+        return payments!=null? payments: new ArrayList<>();
+    }
+    
     
     
 }

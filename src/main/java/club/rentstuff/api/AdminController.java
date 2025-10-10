@@ -12,7 +12,7 @@ import club.rentstuff.entity.ConfigEnt;
 import club.rentstuff.repo.ConfigRepo;
 
 @RestController
-@RequestMapping("/api/admin")
+@RequestMapping("/admin")
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
     @Autowired

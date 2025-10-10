@@ -40,8 +40,8 @@ public class RentalItemEntity {
 
     @Id
     @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "nft_generator")
-    @SequenceGenerator(name = "nft_generator", sequenceName = "nft_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "rental_item_generator")
+    @SequenceGenerator(name = "rental_item_generator", sequenceName = "rental_item_id_seq", allocationSize = 1)
     private Long id;
 
     @Column(name = "NAME")
@@ -49,9 +49,7 @@ public class RentalItemEntity {
 
     @Column(name = "DESCRIPTION")
     private String description;
-    
-    @Column(name = "PRICE")
-    private Double price;
+   
 
     @Column(name = "CREATE_DATE")
     private LocalDateTime createDate;
@@ -59,19 +57,31 @@ public class RentalItemEntity {
     @Column(name = "MODIFY_DATE")
     private LocalDateTime modifyDate;
 
-    @Column(name = "IMAGE_URL")
-    private String imageUrl;
+    @Column(name = "MIN_DAYS")
+    private Integer minDays;
+    
+    @Column(name = "MAX_DAYS")
+    private Integer maxDays;
+    
     
     @ManyToOne
     @JoinColumn(name = "OWNER_ID", nullable = false)
     private UserEntity owner;
 
+    @OneToMany(mappedBy = "rentalItem", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RentalItemImageEntity> images = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "rentalItem", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UnavailableDateEntity> unavailableDates = new ArrayList<>();
+    
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<BookingEntity> bookings = new ArrayList<>();
     
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ReviewItemEntity> reviews = new ArrayList<>();
-    
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<PriceEntity> prices = new ArrayList<>();
     
     @ManyToMany
     @JoinTable(
@@ -81,4 +91,50 @@ public class RentalItemEntity {
     )
     @OrderBy("name ASC")
     private List<TaxonomyEntity> taxonomies = new ArrayList<>();
+    
+    
+    
+
+    // Ensure lists are never null
+    public List<RentalItemImageEntity> getImages() {
+        if (images == null) {
+            images = new ArrayList<>();
+        }
+        return images;
+    }
+
+    public List<UnavailableDateEntity> getUnavailableDates() {
+        if (unavailableDates == null) {
+            unavailableDates = new ArrayList<>();
+        }
+        return unavailableDates;
+    }
+
+    public List<BookingEntity> getBookings() {
+        if (bookings == null) {
+            bookings = new ArrayList<>();
+        }
+        return bookings;
+    }
+
+    public List<ReviewItemEntity> getReviews() {
+        if (reviews == null) {
+            reviews = new ArrayList<>();
+        }
+        return reviews;
+    }
+
+    public List<PriceEntity> getPrices() {
+        if (prices == null) {
+            prices = new ArrayList<>();
+        }
+        return prices;
+    }
+
+    public List<TaxonomyEntity> getTaxonomies() {
+        if (taxonomies == null) {
+            taxonomies = new ArrayList<>();
+        }
+        return taxonomies;
+    }
 }

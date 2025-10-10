@@ -18,13 +18,15 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
-public class UserDto {
+public class PriceDto {
 	private Long id;
-    private String email;
-    private String password;
-    private String firstName;
-    private String lastName;
-    private String role;
-    private LocalDateTime createDate;
-    private LocalDateTime modifyDate;
+
+	private Long itemId;
+	private Double price;
+
+	private Integer minDays;
+
+	private LocalDateTime createDate;
+
+	private LocalDateTime modifyDate;
 }

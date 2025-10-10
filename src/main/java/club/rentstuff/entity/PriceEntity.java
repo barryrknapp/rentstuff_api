@@ -2,11 +2,8 @@ package club.rentstuff.entity;
 
 import java.time.LocalDateTime;
 
-import club.rentstuff.model.PaymentStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,7 +20,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "PAYMENT")
+@Table(name = "PRICE_PER_DAY")
 @Builder(toBuilder = true)
 @EqualsAndHashCode
 @ToString
@@ -31,35 +28,30 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
-public class PaymentEntity {
+public class PriceEntity {
 
     @Id
     @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "payment_generator")
-    @SequenceGenerator(name = "payment_generator", sequenceName = "payment_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "price_generator")
+    @SequenceGenerator(name = "price_generator", sequenceName = "price_id_seq", allocationSize = 1)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "BOOKING_ID", nullable = false)
-    private BookingEntity booking;
+    @JoinColumn(name = "ITEM_ID", nullable = false)
+    private RentalItemEntity item;
 
-    @Column(name = "AMOUNT", nullable = false)
-    private Double amount;
+    @Column(name = "PRICE")
+    private Double price;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "STATUS", nullable = false)
-    private PaymentStatus status;
+    @Column(name = "MIN_DAYS")
+    private Integer minDays;
 
-    @Column(name = "PAYMENT_METHOD")
-    private String paymentMethod; // e.g., CREDIT_CARD, VENMO
-
-    @Column(name = "TRANSACTION_ID")
-    private String transactionId; // External payment system ID (e.g., Stripe)
-
+    
     @Column(name = "CREATE_DATE")
     private LocalDateTime createDate;
 
     @Column(name = "MODIFY_DATE")
     private LocalDateTime modifyDate;
-
+    
+   
 }

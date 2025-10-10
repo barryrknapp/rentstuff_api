@@ -1,11 +1,17 @@
 package club.rentstuff.service;
 
-import club.rentstuff.entity.ReviewItemEntity;
+import java.util.List;
+
+import club.rentstuff.model.ReviewItemDto;
+import club.rentstuff.model.ReviewUserDto;
 
 public interface ReviewItemService {
 
 	Double getAverageRatingByItemId(Long itemId);
 
-	ReviewItemEntity createItemReview(Long itemId, Long userId, int rating, String comment);
+	ReviewItemDto createItemReview(Long itemId, Long userId, int rating, String comment);
+
+	List<ReviewItemDto> findByItemId(Long id);
+
 
 }

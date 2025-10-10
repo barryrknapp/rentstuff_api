@@ -3,12 +3,10 @@ package club.rentstuff.service.impl;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Base64;
 import java.util.Date;
 
 import javax.crypto.SecretKey;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,7 +17,9 @@ import club.rentstuff.service.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @Service
 public class JwtServiceImpl implements JwtService {
 
@@ -68,6 +68,7 @@ public class JwtServiceImpl implements JwtService {
                     .parseSignedClaims(token);
             return true;
         } catch (Exception e) {
+        	log.error(e);
             return false;
         }
     }
