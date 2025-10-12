@@ -91,12 +91,12 @@ public class BookingServiceImpl implements BookingService {
         }
 
         // Sort prices by minDays (ascending) if not already sorted
-        prices.sort((p1, p2) -> Integer.compare(p1.getMinDays(), p2.getMinDays()));
+        prices.sort((p1, p2) -> Integer.compare(p1.getMinDaysRented(), p2.getMinDaysRented()));
 
         // Find the last PriceEntity where minDays <= rental duration
         PriceEntity selectedPrice = null;
         for (PriceEntity price : prices) {
-            if (days >= price.getMinDays()) {
+            if (days >= price.getMinDaysRented()) {
                 selectedPrice = price;
             } else {
                 break; // Since list is sorted, no further prices apply

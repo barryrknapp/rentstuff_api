@@ -44,7 +44,7 @@ public class PriceEntity {
     private Double price;
 
     @Column(name = "MIN_DAYS")
-    private Integer minDays;
+    private Integer minDaysRented;
 
     
     @Column(name = "CREATE_DATE")

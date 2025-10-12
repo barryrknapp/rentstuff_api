@@ -61,16 +61,20 @@ public class ConversionServiceImpl implements ConversionService {
 		UserEntity owner = userRepo.findById(dto.getOwnerId())
 				.orElseThrow(() -> new RuntimeException("User not found: " + dto.getOwnerId()));
 
-
 		// Build RentalItemEntity without setting id (let database handle it)
 		RentalItemEntity entity = RentalItemEntity.builder().name(dto.getName()).description(dto.getDescription())
 				.minDays(dto.getMinDays()).maxDays(dto.getMaxDays()).owner(owner).taxonomies(taxonomies)
 				.createDate(LocalDateTime.now()).build();
 
-		List<RentalItemImageEntity> images = dto.getImageUrls().stream().map(i -> RentalItemImageEntity.builder()
-				.modifyDate(LocalDateTime.now()).createDate(LocalDateTime.now()).imageUrl(i).rentalItem(entity).build())
+		List<RentalItemImageEntity> images = dto.getImageUrls().stream()
+				.map(i -> RentalItemImageEntity.builder().modifyDate(LocalDateTime.now())
+						.createDate(LocalDateTime.now()).imageUrl(i).rentalItem(entity).build())
 				.collect(Collectors.toList());
-		
+
+		List<PriceEntity> prices = dto.getPrices().stream().map(p -> PriceEntity.builder().price(p.getPrice())
+				.item(entity).minDaysRented(p.getMinDaysRented()).createDate(LocalDateTime.now()).build())
+				.collect(Collectors.toList());
+
 		// Build UnavailableDateEntity list
 		List<UnavailableDateEntity> unavailableDates = dto
 				.getUnavailableDates().stream().map(ud -> UnavailableDateEntity.builder().rentalItem(entity)
@@ -79,10 +83,7 @@ public class ConversionServiceImpl implements ConversionService {
 
 		entity.setUnavailableDates(unavailableDates);
 		entity.setImages(images);
-		
-		// Update images to set rentalItem
-		images.forEach(image -> image.setRentalItem(entity));
-		entity.setImages(images);
+		entity.setPrices(prices);
 
 		return entity;
 	}
@@ -111,6 +112,7 @@ public class ConversionServiceImpl implements ConversionService {
 						.map(ud -> UnavailableDateDto.builder().id(ud.getId()).startDate(ud.getStartDate())
 								.rentalItemId(e.getId()).endDate(ud.getEndDate()).build())
 						.collect(Collectors.toList()))
+				.minDays(e.getMinDays()).maxDays(e.getMaxDays())
 				.imageUrls(e.getImages().stream().map(i -> i.getImageUrl()).collect(Collectors.toList()))
 				.averageRating(averageRating).build();
 
@@ -184,7 +186,7 @@ public class ConversionServiceImpl implements ConversionService {
 			return null;
 		}
 		return PriceDto.builder().id(e.getId()).itemId(e.getItem() != null ? e.getItem().getId() : null)
-				.price(e.getPrice()).minDays(e.getMinDays()).createDate(e.getCreateDate()).modifyDate(e.getModifyDate())
+				.price(e.getPrice()).minDaysRented(e.getMinDaysRented()).createDate(e.getCreateDate()).modifyDate(e.getModifyDate())
 				.build();
 	}
 

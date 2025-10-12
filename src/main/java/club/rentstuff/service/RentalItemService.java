@@ -1,7 +1,9 @@
 package club.rentstuff.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+import club.rentstuff.model.PriceCalculationDto;
 import club.rentstuff.model.RentalItemDto;
 
 public interface RentalItemService {
@@ -15,5 +17,7 @@ public interface RentalItemService {
 	RentalItemDto create(RentalItemDto dto);
 
 	List<RentalItemDto> getAll();
+
+	PriceCalculationDto calculatePrice(Long itemId, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
 }
