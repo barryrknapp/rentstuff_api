@@ -11,4 +11,8 @@ public interface NotificationService {
 
 	void sendBookingConfirmationToOwner(BookingEntity savedBooking, UserEntity renter, RentalItemEntity item);
 
+	void sendBookingDeletedToRenter(BookingEntity booking, UserEntity owner);
+
+	void sendBookingDeletedToOwner(BookingEntity booking, UserEntity owner);
+
 }

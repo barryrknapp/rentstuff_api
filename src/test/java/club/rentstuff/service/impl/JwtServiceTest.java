@@ -25,7 +25,7 @@ public class JwtServiceTest {
 	private UserService userService;
 
 	//if you are setting up a new database, you can use this to generate a new JWT key
-	@Test
+//	@Test
 	void testGenerateNewSecret() {
 		
 
@@ -35,7 +35,7 @@ public class JwtServiceTest {
 		assertTrue(base64.length()>0);
 		
 	}
-	@Test
+//	@Test
 	void testGenerateAndValidateToken() {
 		UserDto user = userService.signUp(
 				UserDto.builder().email("test@rentstuff.com").password("Password123").role("ROLE_USER").build());

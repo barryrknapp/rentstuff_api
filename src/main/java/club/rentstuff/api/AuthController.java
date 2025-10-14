@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import club.rentstuff.model.UserDto;
 import club.rentstuff.service.AuthService;
 import club.rentstuff.service.UserService;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -26,6 +28,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody UserDto userDto) {
+    	
         String token = authService.login(userDto.getEmail(), userDto.getPassword());
         return ResponseEntity.ok(token);
     }

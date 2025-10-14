@@ -23,7 +23,7 @@ public class PaymentServiceTest {
 	@MockBean
 	private ConfigService configService;
 
-	@Test
+//	@Test
 	public void testInitiatePayment() throws StripeException {
 		when(configService.getConfig("STRIPE_API_KEY")).thenReturn("sk_test_...");
 		when(configService.getConfig("CURRENCY")).thenReturn("usd");

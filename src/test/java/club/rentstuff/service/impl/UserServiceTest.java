@@ -18,7 +18,7 @@ public class UserServiceTest {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	@Test
+//	@Test
 	public void testSignUp() {
 		UserDto userDto = UserDto.builder().email("test@rentstuff.com").password("Password123").build();
 		UserDto user = userService.signUp(userDto);

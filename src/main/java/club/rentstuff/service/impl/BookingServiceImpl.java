@@ -214,9 +214,13 @@ public class BookingServiceImpl implements BookingService {
             throw new IllegalStateException("Cannot delete booking with status: " + booking.getStatus());
         }
 
-        //TODO notification service
         
         bookingRepository.delete(booking);
+        
+        
+        notificationService.sendBookingDeletedToRenter(booking, owner);
+        notificationService.sendBookingDeletedToOwner(booking, owner);
+        
     }
 	
 	
