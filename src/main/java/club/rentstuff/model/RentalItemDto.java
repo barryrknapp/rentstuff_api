@@ -24,7 +24,7 @@ public class RentalItemDto {
 	private String name;
 	
 	@Builder.Default
-	private List<String> imageUrls = new ArrayList<>();
+    private List<Long> imageIds = new ArrayList<>();
 	private String description;
 	
 	@Builder.Default

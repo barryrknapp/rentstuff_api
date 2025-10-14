@@ -27,7 +27,6 @@ import club.rentstuff.model.ReviewUserDto;
 import club.rentstuff.model.TaxonomyDto;
 import club.rentstuff.model.UnavailableDateDto;
 import club.rentstuff.model.UserDto;
-import club.rentstuff.repo.RentalItemImageRepo;
 import club.rentstuff.repo.TaxonomyRepo;
 import club.rentstuff.repo.UserRepo;
 import club.rentstuff.service.ConversionService;
@@ -41,17 +40,25 @@ public class ConversionServiceImpl implements ConversionService {
 	@Autowired
 	private TaxonomyRepo taxonomyRepo;
 
-	@Autowired
-	private RentalItemImageRepo rentalItemImageRepo;
 	
 
 	@Override
 	public RentalItemImageDto convertRentalItemImageEntity(RentalItemImageEntity ent) {
 
-		return RentalItemImageDto.builder().id(ent.getId()).createDate(ent.getCreateDate()).imageUrl(ent.getImageUrl())
+		return RentalItemImageDto.builder().id(ent.getId()).createDate(ent.getCreateDate()).contentType(ent.getContentType())
 				.modifyDate(ent.getModifyDate()).rentalItemId(ent.getRentalItem().getId()).build();
 	}
 
+	@Override
+    public UnavailableDateDto convertUnavailableDateEntity(UnavailableDateEntity entity) {
+        return UnavailableDateDto.builder()
+            .id(entity.getId())
+            .startDate(entity.getStartDate())
+            .endDate(entity.getEndDate())
+            .itemId(entity.getRentalItem().getId())
+            .build();
+    }
+    
 	@Override
 	public RentalItemEntity convertRentalItemDto(RentalItemDto dto) {
 		if (dto == null || dto.getOwnerId() == null) {
@@ -67,9 +74,9 @@ public class ConversionServiceImpl implements ConversionService {
 				.minDays(dto.getMinDays()).maxDays(dto.getMaxDays()).owner(owner).taxonomies(taxonomies).paused(dto.getPaused())
 				.createDate(LocalDateTime.now()).build();
 
-		List<RentalItemImageEntity> images = dto.getImageUrls().stream()
+		List<RentalItemImageEntity> images = dto.getImageIds().stream()
 				.map(i -> RentalItemImageEntity.builder().modifyDate(LocalDateTime.now())
-						.createDate(LocalDateTime.now()).imageUrl(i).rentalItem(entity).build())
+						.createDate(LocalDateTime.now()).id(i).rentalItem(entity).build())
 				.collect(Collectors.toList());
 
 		List<PriceEntity> prices = dto.getPrices().stream().map(p -> PriceEntity.builder().price(p.getPrice())
@@ -111,10 +118,10 @@ public class ConversionServiceImpl implements ConversionService {
 				.taxonomyIds(e.getTaxonomies().stream().map(t -> t.getId()).toList())
 				.unavailableDates(e.getUnavailableDates().stream()
 						.map(ud -> UnavailableDateDto.builder().id(ud.getId()).startDate(ud.getStartDate())
-								.rentalItemId(e.getId()).endDate(ud.getEndDate()).build())
+								.itemId(e.getId()).endDate(ud.getEndDate()).build())
 						.collect(Collectors.toList()))
 				.minDays(e.getMinDays()).maxDays(e.getMaxDays())
-				.imageUrls(e.getImages().stream().map(i -> i.getImageUrl()).collect(Collectors.toList()))
+				.imageIds(e.getImages().stream().map(i -> i.getId()).collect(Collectors.toList()))
 				.averageRating(averageRating).build();
 
 	}

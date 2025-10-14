@@ -21,7 +21,7 @@ public class RentalItemImageDto {
 	private Long id;
 	private Long rentalItemId;
 
-	private String imageUrl;
+    private String contentType; // e.g., "image/jpeg"
 
 	private LocalDateTime createDate;
 

@@ -44,13 +44,18 @@ public class RentalItemImageEntity {
     private RentalItemEntity rentalItem;
 
     
-    
-    @Column(name = "IMAGE_URL", nullable = false)
-    private String imageUrl;
+    @Column(name = "IMAGE_DATA", columnDefinition = "BYTEA")
+    private byte[] imageData;
+
+    @Column(name = "CONTENT_TYPE", nullable = false)
+    private String contentType;
     
     @Column(name = "CREATE_DATE")
     private LocalDateTime createDate;
 
     @Column(name = "MODIFY_DATE")
     private LocalDateTime modifyDate;
+    
+    
+
 }

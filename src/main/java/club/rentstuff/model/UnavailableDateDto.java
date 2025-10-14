@@ -19,7 +19,7 @@ import lombok.ToString;
 @Setter
 public class UnavailableDateDto {
     private Long id;
-    private Long rentalItemId;
+    private Long itemId;
     private LocalDate startDate;
     private LocalDate endDate;
 }

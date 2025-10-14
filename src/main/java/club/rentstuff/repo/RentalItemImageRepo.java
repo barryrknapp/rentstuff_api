@@ -12,4 +12,6 @@ public interface RentalItemImageRepo extends JpaRepository<RentalItemImageEntity
     @Query("SELECT r FROM RentalItemImageEntity r WHERE r.rentalItem.id = :itemId")
 	List<RentalItemImageEntity> findByItemId(Long itemId);
 
+	void deleteByRentalItemId(Long id);
+
 }

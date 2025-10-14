@@ -33,7 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
     	
-    	log.info("REQUESTED PATH " + request.getContextPath() + request.getServletPath());
+//    	log.info("REQUESTED PATH " + request.getContextPath() + request.getServletPath());
     	
     	
     	

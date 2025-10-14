@@ -5,9 +5,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,11 +19,18 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
+import club.rentstuff.entity.RentalItemImageEntity;
 import club.rentstuff.model.PriceCalculationDto;
+import club.rentstuff.model.PriceDto;
 import club.rentstuff.model.RentalItemDto;
+import club.rentstuff.model.UnavailableDateDto;
 import club.rentstuff.service.RentalItemService;
+import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -72,15 +82,95 @@ public class RentalItemController {
 		return ResponseEntity.ok(items);
 	}
 
-	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	@PreAuthorize("isAuthenticated()")
-	public ResponseEntity<RentalItemDto> createRentalItem(@RequestBody RentalItemDto dto) {
-		return ResponseEntity.ok(rentalItemService.create(dto));
-	}
+//	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+//	@PreAuthorize("isAuthenticated()")
+//	public ResponseEntity<RentalItemDto> createRentalItem(@RequestBody RentalItemDto dto) {
+//		return ResponseEntity.ok(rentalItemService.create(dto));
+//	}
+//
+//	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+//	@PreAuthorize("isAuthenticated()")
+//	public ResponseEntity<RentalItemDto> updateRentalItem(@PathVariable Long id, @RequestBody RentalItemDto dto) {
+//		return ResponseEntity.ok(rentalItemService.update(id, dto));
+//	}
+	
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<RentalItemDto> createRentalItem(
+        @RequestPart("item") @Valid RentalItemDto itemDto,
+        @RequestPart(value = "images", required = false) List<MultipartFile> images
+    ) {
+        RentalItemDto createdItem = rentalItemService.createRentalItemWithImages(itemDto, images);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdItem);
+    }
 
-	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	@PreAuthorize("isAuthenticated()")
-	public ResponseEntity<RentalItemDto> updateRentalItem(@PathVariable Long id, @RequestBody RentalItemDto dto) {
-		return ResponseEntity.ok(rentalItemService.update(id, dto));
-	}
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<RentalItemDto> updateRentalItem(
+        @PathVariable Long id,
+        @RequestPart("item") @Valid RentalItemDto itemDto,
+        @RequestPart(value = "images", required = false) List<MultipartFile> images
+    ) {
+        if (!id.equals(itemDto.getId())) {
+            throw new IllegalArgumentException("ID mismatch");
+        }
+        RentalItemDto updatedItem = rentalItemService.updateRentalItemWithImages(itemDto, images);
+        return ResponseEntity.ok(updatedItem);
+    }
+
+    
+    @GetMapping("/images/{id}")
+    public ResponseEntity<byte[]> getImage(@PathVariable Long id) {
+        try {
+            RentalItemImageEntity image = rentalItemService.getImage(id);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType(image.getContentType()));
+            headers.setCacheControl(CacheControl.noCache().mustRevalidate());
+            headers.setPragma("no-cache");
+            headers.setExpires(0);
+            return new ResponseEntity<>(image.getImageData(), headers, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Image not found: " + e.getMessage());
+        }
+    }
+    
+    @PostMapping("/unavailable-dates")
+    public ResponseEntity<UnavailableDateDto> createUnavailableDate(
+        @RequestBody @Valid UnavailableDateDto dateDto
+    ) {
+        UnavailableDateDto createdDate = rentalItemService.createUnavailableDate(dateDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdDate);
+    }
+    
+    @PostMapping("/prices")
+    public ResponseEntity<PriceDto> createPrice(
+        @RequestBody @Valid PriceDto priceDto
+    ) {
+        PriceDto createdPrice = rentalItemService.createPrice(priceDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdPrice);
+    }
+    
+    // New endpoints for deletions
+    @DeleteMapping("/images/{imageId}")
+    public ResponseEntity<Void> deleteImage(
+        @PathVariable Long imageId
+    ) {
+        rentalItemService.deleteImage(imageId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/unavailable-dates/{dateId}")
+    public ResponseEntity<Void> deleteUnavailableDate(
+        @PathVariable Long dateId
+    ) {
+        rentalItemService.deleteUnavailableDate(dateId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/prices/{priceId}")
+    public ResponseEntity<Void> deletePrice(
+        @PathVariable Long priceId
+    ) {
+        rentalItemService.deletePrice(priceId);
+        return ResponseEntity.noContent().build();
+    }
+    
 }

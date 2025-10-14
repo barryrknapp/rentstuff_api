@@ -1,5 +1,6 @@
 package club.rentstuff.exception;
 
+import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,14 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(ServiceException.class)
 	public ResponseEntity<ErrorResponse> handleServiceException(ServiceException ex) {
 		logger.error("Service exception: {}", ex.getMessage(), ex);
+		
+        if (ex.getCause() instanceof SizeLimitExceededException) {
+            return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Upload size exceeds the maximum limit of 200MB"));
+        }
+        
+        
 		ErrorResponse errorResponse = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
 				"An error occurred while processing your request. Please try again later.");
 		return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);

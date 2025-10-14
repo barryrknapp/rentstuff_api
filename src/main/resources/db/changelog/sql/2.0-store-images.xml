@@ -5,7 +5,7 @@
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 	<changeSet id="update-rental-item-image-table"
 		author="bknapp">
-		<dropColumn tableName="rental_item_image" columnName="url" />
+		<dropColumn tableName="rental_item_image" columnName="IMAGE_URL" />
 		<addColumn tableName="rental_item_image">
 			<column name="image_data" type="BYTEA" />
 			<column name="content_type" type="VARCHAR(50)"
