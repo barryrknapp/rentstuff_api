@@ -1,5 +1,7 @@
 package club.rentstuff.model;
 
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -16,6 +18,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @Setter
 public class PriceCalculationDto {
-	private Double totalPrice;
+	private BigDecimal totalPrice;
 	private Integer days;
 }

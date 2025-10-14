@@ -20,4 +20,10 @@ public interface RentalItemService {
 
 	PriceCalculationDto calculatePrice(Long itemId, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
+	List<RentalItemDto> findByOwnerUserId(Long userId);
+
+	List<RentalItemDto> findOwnedByUser();
+
+	RentalItemDto togglePause(Long itemId, boolean paused);
+
 }

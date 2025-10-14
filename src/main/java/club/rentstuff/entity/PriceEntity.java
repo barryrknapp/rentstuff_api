@@ -1,5 +1,6 @@
 package club.rentstuff.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -41,7 +42,7 @@ public class PriceEntity {
     private RentalItemEntity item;
 
     @Column(name = "PRICE")
-    private Double price;
+    private BigDecimal price;
 
     @Column(name = "MIN_DAYS")
     private Integer minDaysRented;

@@ -49,7 +49,9 @@ public class RentalItemEntity {
 
     @Column(name = "DESCRIPTION")
     private String description;
-   
+
+    @Column(name = "PAUSED", nullable = false)
+    private boolean paused = false; // Default to false (active)
 
     @Column(name = "CREATE_DATE")
     private LocalDateTime createDate;

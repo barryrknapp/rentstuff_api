@@ -1,12 +1,15 @@
 package club.rentstuff.service.impl;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import club.rentstuff.entity.PriceEntity;
@@ -46,6 +49,9 @@ public class RentalItemServiceImpl implements RentalItemService {
 	@Autowired
 	private UserRepo userRepo;
 
+	/**
+	 * calculates total price for a given number of days days*price
+	 */
 	@Override
 	public PriceCalculationDto calculatePrice(Long itemId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
 		RentalItemEntity item = repository.findById(itemId)
@@ -83,7 +89,7 @@ public class RentalItemServiceImpl implements RentalItemService {
 				.orElseThrow(() -> new RuntimeException("No applicable price found for " + days + " days"));
 
 		PriceCalculationDto result = new PriceCalculationDto();
-		result.setTotalPrice(applicablePrice.getPrice() * days);
+		result.setTotalPrice(applicablePrice.getPrice().multiply(BigDecimal.valueOf(days)));
 		result.setDays((int) days);
 		return result;
 	}
@@ -152,6 +158,7 @@ public class RentalItemServiceImpl implements RentalItemService {
 		entity.setTaxonomies(taxonomies);
 		entity.setOwner(owner);
 		entity.getUnavailableDates().clear();
+		entity.setPaused(dto.getPaused());
 		entity.getUnavailableDates().addAll(unavailableDates);
 		final RentalItemEntity finEnt = entity;
 		unavailableDates.stream().forEach(u -> u.setRentalItem(finEnt.toBuilder().build()));
@@ -163,8 +170,45 @@ public class RentalItemServiceImpl implements RentalItemService {
 
 	@Override
 	public List<RentalItemDto> getAll() {
-		return repository.findAll().stream().map(e -> conversionService.convertRentalItemEntity(e))
-				.collect(Collectors.toList());
+		return repository.findAll(Example.of(RentalItemEntity.builder().paused(false).build())).stream()
+				.map(e -> conversionService.convertRentalItemEntity(e)).collect(Collectors.toList());
+	}
+
+	@Override
+	public List<RentalItemDto> findByOwnerUserId(Long userId) {
+		UserEntity owner = userRepo.findById(userId).get();
+		List<RentalItemDto> activeItems = repository.findAll(Example.of(RentalItemEntity.builder().owner(owner).build())).stream()
+				.map(e -> conversionService.convertRentalItemEntity(e)).collect(Collectors.toList());
+		
+		List<RentalItemDto> pausedItems = repository.findAll(Example.of(RentalItemEntity.builder().paused(true).owner(owner).build())).stream()
+				.map(e -> conversionService.convertRentalItemEntity(e)).collect(Collectors.toList());
+		
+		List<RentalItemDto> allItems = new ArrayList<>();
+		allItems.addAll(activeItems);
+		allItems.addAll(pausedItems);
+		return allItems;
+		
+	}
+
+	@Override
+	public List<RentalItemDto> findOwnedByUser() {
+		UserEntity user = authService.getLoggedInUser().get();
+		return findByOwnerUserId(user.getId());
+	}
+
+	@Override
+	public RentalItemDto togglePause(Long itemId, boolean paused) {
+		UserEntity user = authService.getLoggedInUser().get();
+		RentalItemEntity item = repository.findById(itemId)
+				.orElseThrow(() -> new IllegalArgumentException("Item not found"));
+
+		if (!item.getOwner().getId().equals(user.getId())) {
+			throw new IllegalStateException("Unauthorized to modify this item");
+		}
+
+		item.setPaused(paused);
+		RentalItemEntity updatedItem = repository.save(item);
+		return conversionService.convertRentalItemEntity(updatedItem);
 	}
 
 }

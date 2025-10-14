@@ -1,8 +1,8 @@
 package club.rentstuff.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import club.rentstuff.model.PaymentIntentDto.PaymentIntentDtoBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -22,7 +22,7 @@ public class PriceDto {
 	private Long id;
 
 	private Long itemId;
-	private Double price;
+	private BigDecimal price;
 
 	private Integer minDaysRented;
 

@@ -1,5 +1,6 @@
 package club.rentstuff.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +64,9 @@ public class BookingEntity {
 
     @Column(name = "MODIFY_DATE")
     private LocalDateTime modifyDate;
+    
+    @Column(name = "TOTAL_PRICE")
+	private BigDecimal totalPrice;
     
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<PaymentEntity> payments = new ArrayList<>();

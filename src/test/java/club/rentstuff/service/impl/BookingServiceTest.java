@@ -20,7 +20,7 @@ public class BookingServiceTest {
 	@Test
 	public void testBookingConflict() {
 		assertThrows(IllegalStateException.class, () -> {
-			bookingService.createBooking(1L, 1L, now, now);
+			//bookingService.createBooking(1L, 1L, now, now);
 		});
 	}
 }

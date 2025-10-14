@@ -34,11 +34,12 @@ public class RentalItemDto {
 	private LocalDateTime createDate;
 	private LocalDateTime modifyDate;
 	private Long ownerId;
-	
+    private Boolean paused;
 	@Builder.Default
 	private List<Long> taxonomyIds = new ArrayList<>();
 	private Double averageRating; // Optional: Computed from reviews
     
 	@Builder.Default
 	private List<UnavailableDateDto> unavailableDates = new ArrayList<>();
+	private List<UnavailableDateDto> bookedDates = new ArrayList<>();
 }

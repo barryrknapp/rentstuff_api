@@ -43,6 +43,7 @@ public class ConversionServiceImpl implements ConversionService {
 
 	@Autowired
 	private RentalItemImageRepo rentalItemImageRepo;
+	
 
 	@Override
 	public RentalItemImageDto convertRentalItemImageEntity(RentalItemImageEntity ent) {
@@ -63,7 +64,7 @@ public class ConversionServiceImpl implements ConversionService {
 
 		// Build RentalItemEntity without setting id (let database handle it)
 		RentalItemEntity entity = RentalItemEntity.builder().name(dto.getName()).description(dto.getDescription())
-				.minDays(dto.getMinDays()).maxDays(dto.getMaxDays()).owner(owner).taxonomies(taxonomies)
+				.minDays(dto.getMinDays()).maxDays(dto.getMaxDays()).owner(owner).taxonomies(taxonomies).paused(dto.getPaused())
 				.createDate(LocalDateTime.now()).build();
 
 		List<RentalItemImageEntity> images = dto.getImageUrls().stream()
@@ -102,7 +103,7 @@ public class ConversionServiceImpl implements ConversionService {
 		// Extract taxonomy IDs
 		List<Long> taxonomyIds = e.getTaxonomies().stream().map(TaxonomyEntity::getId).collect(Collectors.toList());
 
-		return RentalItemDto.builder().id(e.getId()).name(e.getName()).description(e.getDescription())
+		return RentalItemDto.builder().id(e.getId()).name(e.getName()).description(e.getDescription()).paused(e.isPaused())
 				.taxonomyIds(taxonomyIds)
 				.prices(e.getPrices().stream().map(this::convertPriceEntity).collect(Collectors.toList()))
 				.createDate(e.getCreateDate()).modifyDate(e.getModifyDate())
@@ -137,6 +138,7 @@ public class ConversionServiceImpl implements ConversionService {
 		return BookingDto.builder().id(e.getId()).itemId(e.getItem() != null ? e.getItem().getId() : null)
 				.userId(e.getRenter() != null ? e.getRenter().getId() : null).startDate(e.getStartDate())
 				.endDate(e.getEndDate()).status(e.getStatus()).createDate(e.getCreateDate())
+				.totalPrice(e.getTotalPrice())
 				.modifyDate(e.getModifyDate()).build();
 	}
 

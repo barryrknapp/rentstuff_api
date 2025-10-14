@@ -1,10 +1,10 @@
 package club.rentstuff.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import club.rentstuff.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -24,13 +24,15 @@ public class BookingDto {
 	private Long id;
 	private Long itemId;
 	private Long userId;
-	private UserEntity renter;
 	private LocalDateTime startDate;
 	private LocalDateTime endDate;
 	private String status; // e.g., PENDING, CONFIRMED, CANCELLED
 
 	private LocalDateTime createDate;
 	private LocalDateTime modifyDate;
+	
+	private BigDecimal totalPrice;
+	
 	@Builder.Default
-	private List<PaymentDto> payments = new ArrayList<>();
+	private List<Long> paymentIds = new ArrayList<>();
 }
