@@ -19,8 +19,8 @@ public class ErrorResponse {
 		this.status = status;
 	}
 
-	public String getResponse() {
-		return message;
+	public Response getResponse() {
+		return response;
 	}
 	public String getMessage() {
 		return message;
