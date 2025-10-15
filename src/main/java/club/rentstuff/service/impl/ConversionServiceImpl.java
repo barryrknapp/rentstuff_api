@@ -62,12 +62,12 @@ public class ConversionServiceImpl implements ConversionService {
 	@Override
 	public RentalItemEntity convertRentalItemDto(RentalItemDto dto) {
 		if (dto == null || dto.getOwnerId() == null) {
-			throw new RuntimeException("The owner of the rental item needs to be set!");
+			throw new IllegalStateException("The owner of the rental item needs to be set!");
 		}
 
 		List<TaxonomyEntity> taxonomies = taxonomyRepo.findAllById(dto.getTaxonomyIds());
 		UserEntity owner = userRepo.findById(dto.getOwnerId())
-				.orElseThrow(() -> new RuntimeException("User not found: " + dto.getOwnerId()));
+				.orElseThrow(() -> new IllegalStateException("User not found: " + dto.getOwnerId()));
 
 		// Build RentalItemEntity without setting id (let database handle it)
 		RentalItemEntity entity = RentalItemEntity.builder().name(dto.getName()).description(dto.getDescription())

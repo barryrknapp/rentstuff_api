@@ -25,6 +25,10 @@ public class ServiceExceptionAspect {
 		if (ex instanceof IllegalArgumentException) {
 			throw new ServiceException(ex.getLocalizedMessage(), ex);
 		}
+		
+		if (ex instanceof IllegalStateException) {
+			throw new ServiceException(ex.getLocalizedMessage(), ex);
+		}
 
 		if (ex instanceof ResponseStatusException) {
 			throw new ServiceException(ex.getLocalizedMessage(), ex);

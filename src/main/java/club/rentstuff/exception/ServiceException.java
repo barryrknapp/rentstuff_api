@@ -1,6 +1,6 @@
 package club.rentstuff.exception;
 
-public class ServiceException extends RuntimeException {
+public class ServiceException extends IllegalStateException {
 	/**
 	 * 
 	 */

@@ -103,7 +103,7 @@ public class BookingServiceImpl implements BookingService {
  //           PaymentEntity payment = paymentService.initiatePayment(savedBooking.getId(), totalPrice);
 
 //        } catch (StripeException e) {
-//           throw new RuntimeException("Failed to initiate payment", e);
+//           throw new IllegalStateException("Failed to initiate payment", e);
 //        }
         
         try {

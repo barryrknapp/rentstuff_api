@@ -68,23 +68,23 @@ public class RentalItemServiceImpl implements RentalItemService {
 	@Override
 	public PriceCalculationDto calculatePrice(Long itemId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
 		RentalItemEntity item = repository.findById(itemId)
-				.orElseThrow(() -> new RuntimeException("Item not found: " + itemId));
+				.orElseThrow(() -> new IllegalStateException("Item not found: " + itemId));
 
 		// Validate dates
 		if (startDateTime.isAfter(endDateTime)) {
-			throw new RuntimeException("Dropoff date and time must be after pickup");
+			throw new IllegalStateException("Dropoff date and time must be after pickup");
 		}
 		if (startDateTime.isBefore(LocalDateTime.now())) {
-			throw new RuntimeException("Pickup date and time must be now or later");
+			throw new IllegalStateException("Pickup date and time must be now or later");
 		}
 
 		// Calculate days (ceiling to account for partial days)
 		long days = (long) Math.ceil(ChronoUnit.HOURS.between(startDateTime, endDateTime) / 24.0);
 		if (days < item.getMinDays()) {
-			throw new RuntimeException("Rental duration must be at least " + item.getMinDays() + " days");
+			throw new IllegalStateException("Rental duration must be at least " + item.getMinDays() + " days");
 		}
 		if (days > item.getMaxDays()) {
-			throw new RuntimeException("Rental duration cannot exceed " + item.getMaxDays() + " days");
+			throw new IllegalStateException("Rental duration cannot exceed " + item.getMaxDays() + " days");
 		}
 
 		// Validate against unavailable dates
@@ -92,14 +92,14 @@ public class RentalItemServiceImpl implements RentalItemService {
 			LocalDateTime unavailableStart = unavailable.getStartDate().atStartOfDay();
 			LocalDateTime unavailableEnd = unavailable.getEndDate().atStartOfDay().plusDays(1).minusMinutes(1);
 			if (!startDateTime.isAfter(unavailableEnd) && !endDateTime.isBefore(unavailableStart)) {
-				throw new RuntimeException("Selected dates overlap with unavailable dates");
+				throw new IllegalStateException("Selected dates overlap with unavailable dates");
 			}
 		}
 
 		// Find applicable price (highest minDaysRented that is <= days)
 		PriceEntity applicablePrice = item.getPrices().stream().filter(price -> price.getMinDaysRented() <= days)
 				.max((p1, p2) -> Integer.compare(p1.getMinDaysRented(), p2.getMinDaysRented()))
-				.orElseThrow(() -> new RuntimeException("No applicable price found for " + days + " days"));
+				.orElseThrow(() -> new IllegalStateException("No applicable price found for " + days + " days"));
 
 		PriceCalculationDto result = new PriceCalculationDto();
 		result.setTotalPrice(applicablePrice.getPrice().multiply(BigDecimal.valueOf(days)));
@@ -108,7 +108,7 @@ public class RentalItemServiceImpl implements RentalItemService {
 	}
 
 	public RentalItemDto getById(Long id) {
-		RentalItemEntity entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Item not found"));
+		RentalItemEntity entity = repository.findById(id).orElseThrow(() -> new IllegalStateException("Item not found"));
 		return conversionService.convertRentalItemEntity(entity);
 	}
 
@@ -132,7 +132,7 @@ public class RentalItemServiceImpl implements RentalItemService {
 
 //	public RentalItemDto update(Long id, RentalItemDto dto) {
 //
-//		RentalItemEntity entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Item not found"));
+//		RentalItemEntity entity = repository.findById(id).orElseThrow(() -> new IllegalStateException("Item not found"));
 //
 //		List<UnavailableDateEntity> unavailableDates = dto.getUnavailableDates().stream().map(
 //				ud -> UnavailableDateEntity.builder().startDate(ud.getStartDate()).endDate(ud.getEndDate()).build())
@@ -248,7 +248,7 @@ public class RentalItemServiceImpl implements RentalItemService {
 					imageEntity.setContentType(image.getContentType());
 					imageEntities.add(imageEntity);
 				} catch (IOException e) {
-					throw new RuntimeException("Failed to process image: " + e.getMessage());
+					throw new IllegalStateException("Failed to process image: " + e.getMessage());
 				}
 			}
 			rentalItemImageRepo.saveAll(imageEntities);
@@ -293,7 +293,7 @@ public class RentalItemServiceImpl implements RentalItemService {
 					imageEntities.add(imageEntity);
 				} catch (IOException e) {
 					log.error("Failed to process image: {}", e.getMessage());
-					throw new RuntimeException("Failed to process image: " + e.getMessage());
+					throw new IllegalStateException("Failed to process image: " + e.getMessage());
 				}
 			}
 			rentalItemImageRepo.saveAll(imageEntities);
