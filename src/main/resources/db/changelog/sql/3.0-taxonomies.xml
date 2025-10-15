@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+	<changeSet id="taxonomies"
+		author="bknapp">
+		<!-- ================= ELECTRONICS ================= -->
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Drones" />
+			<column name="PARENT_ID" valueComputed="currval('taxonomy_id_seq') - 2" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Projectors" />
+			<column name="PARENT_ID" valueComputed="currval('taxonomy_id_seq') - 3" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Audio Equipment" />
+			<column name="PARENT_ID" valueComputed="currval('taxonomy_id_seq') - 4" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Speakers" />
+			<column name="PARENT_ID" valueComputed="currval('taxonomy_id_seq') - 1" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Lighting" />
+			<column name="PARENT_ID" valueComputed="currval('taxonomy_id_seq') - 2" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+
+		<!-- ================= TOOLS ================= -->
+
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Power Tools" />
+			<column name="PARENT_ID" valueComputed="currval('taxonomy_id_seq') - 1" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Hand Tools" />
+			<column name="PARENT_ID" valueComputed="currval('taxonomy_id_seq') - 2" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Ladders and Scaffolding" />
+			<column name="PARENT_ID" valueComputed="currval('taxonomy_id_seq') - 3" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Lawn and Garden Tools" />
+			<column name="PARENT_ID" valueComputed="currval('taxonomy_id_seq') - 4" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Concrete and Masonry" />
+			<column name="PARENT_ID" valueComputed="currval('taxonomy_id_seq') - 5" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+
+		<!-- ================= VEHICLES ================= -->
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Vehicles" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Cars and Trucks" />
+			<column name="PARENT_ID" valueComputed="currval('taxonomy_id_seq') - 1" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="RVs and Campers" />
+			<column name="PARENT_ID" valueComputed="currval('taxonomy_id_seq') - 2" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Motorcycles and Scooters" />
+			<column name="PARENT_ID" valueComputed="currval('taxonomy_id_seq') - 3" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Bicycles and E-Bikes" />
+			<column name="PARENT_ID" valueComputed="currval('taxonomy_id_seq') - 4" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Boats and Watercraft" />
+			<column name="PARENT_ID" valueComputed="currval('taxonomy_id_seq') - 5" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+
+		<!-- ================= PARTY and EVENT ================= -->
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Party and Event Supplies" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Tents and Canopies" />
+			<column name="PARENT_ID" valueComputed="currval('taxonomy_id_seq') - 1" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Tables and Chairs" />
+			<column name="PARENT_ID" valueComputed="currval('taxonomy_id_seq') - 2" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Lighting and Decor" />
+			<column name="PARENT_ID" valueComputed="currval('taxonomy_id_seq') - 3" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Audio/Visual Equipment" />
+			<column name="PARENT_ID" valueComputed="currval('taxonomy_id_seq') - 4" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+
+		<!-- ================= SPORTS and OUTDOORS ================= -->
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Sports and Outdoors" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Camping Gear" />
+			<column name="PARENT_ID" valueComputed="currval('taxonomy_id_seq') - 1" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Kayaks and Canoes" />
+			<column name="PARENT_ID" valueComputed="currval('taxonomy_id_seq') - 2" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Paddle Boards" />
+			<column name="PARENT_ID" valueComputed="currval('taxonomy_id_seq') - 3" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Snow Gear" />
+			<column name="PARENT_ID" valueComputed="currval('taxonomy_id_seq') - 4" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Hiking Equipment" />
+			<column name="PARENT_ID" valueComputed="currval('taxonomy_id_seq') - 5" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+
+		<!-- ================= HOME and GARDEN ================= -->
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Home and Garden" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Appliances" />
+			<column name="PARENT_ID" valueComputed="currval('taxonomy_id_seq') - 1" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Furniture" />
+			<column name="PARENT_ID" valueComputed="currval('taxonomy_id_seq') - 2" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Yard Equipment" />
+			<column name="PARENT_ID" valueComputed="currval('taxonomy_id_seq') - 3" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+
+		<!-- ================= MISC / OTHER ================= -->
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Costumes and Props" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Board Games and Entertainment" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Musical Instruments" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Baby and Kids Gear" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+		<insert tableName="TAXONOMY">
+			<column name="ID" valueComputed="nextval('taxonomy_id_seq')" />
+			<column name="NAME" value="Medical Equipment" />
+			<column name="CREATE_DATE" valueComputed="CURRENT_TIMESTAMP" />
+		</insert>
+
+	</changeSet>
+
+</databaseChangeLog>

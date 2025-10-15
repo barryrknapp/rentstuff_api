@@ -15,6 +15,9 @@
 	<include file="sql/2.0-store-images.xml"
 		relativeToChangelogFile="true" />
 
+	<include file="sql/3.0-taxonomies.xml"
+		relativeToChangelogFile="true" />
+
 
 
 </databaseChangeLog> 
