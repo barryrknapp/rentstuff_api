@@ -39,6 +39,7 @@ public class UnavailableDateEntity {
     @SequenceGenerator(name = "unavailable_date_generator", sequenceName = "unavailable_date_id_seq", allocationSize = 1)
     private Long id;
 
+	@ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "RENTAL_ITEM_ID", nullable = false)
     private RentalItemEntity rentalItem;

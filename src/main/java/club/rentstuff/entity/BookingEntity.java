@@ -42,6 +42,7 @@ public class BookingEntity {
     @SequenceGenerator(name = "booking_generator", sequenceName = "booking_id_seq", allocationSize = 1)
     private Long id;
 
+	@ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "ITEM_ID", nullable = false)
     private RentalItemEntity item;
