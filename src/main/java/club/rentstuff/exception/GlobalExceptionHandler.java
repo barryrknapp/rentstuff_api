@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -15,7 +16,8 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(ServiceException.class)
 	public ResponseEntity<ErrorResponse> handleServiceException(ServiceException ex) {
-		logger.error("Service exception: {}", ex.getMessage(), ex);
+		
+		if(true)return null;
 		
         if (ex.getCause() instanceof SizeLimitExceededException) {
             return ResponseEntity
@@ -23,7 +25,20 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Upload size exceeds the maximum limit of 200MB"));
         }
         
+        if(ex.getCause() instanceof IllegalArgumentException) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getLocalizedMessage()));     	
+        }
+
+        if(ex.getCause() instanceof ResponseStatusException) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getLocalizedMessage()));     	
+        }
         
+        
+		logger.error("Service exception: {}", ex.getMessage(), ex);
 		ErrorResponse errorResponse = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
 				"An error occurred while processing your request. Please try again later.");
 		return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);

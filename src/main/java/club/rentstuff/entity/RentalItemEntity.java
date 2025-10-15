@@ -51,7 +51,7 @@ public class RentalItemEntity {
     private String description;
 
     @Column(name = "PAUSED", nullable = false)
-    private boolean paused = false; // Default to false (active)
+    private boolean paused;
 
     @Column(name = "CREATE_DATE")
     private LocalDateTime createDate;
@@ -71,19 +71,19 @@ public class RentalItemEntity {
     private UserEntity owner;
 
     @OneToMany(mappedBy = "rentalItem", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RentalItemImageEntity> images = new ArrayList<>();
+    private List<RentalItemImageEntity> images;
     
     @OneToMany(mappedBy = "rentalItem", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UnavailableDateEntity> unavailableDates = new ArrayList<>();
+    private List<UnavailableDateEntity> unavailableDates;
     
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<BookingEntity> bookings = new ArrayList<>();
+    private List<BookingEntity> bookings;
     
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ReviewItemEntity> reviews = new ArrayList<>();
+    private List<ReviewItemEntity> reviews;
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<PriceEntity> prices = new ArrayList<>();
+    private List<PriceEntity> prices;
     
     @ManyToMany
     @JoinTable(
@@ -92,7 +92,7 @@ public class RentalItemEntity {
         inverseJoinColumns = @JoinColumn(name = "TAXONOMY_ID")
     )
     @OrderBy("name ASC")
-    private List<TaxonomyEntity> taxonomies = new ArrayList<>();
+    private List<TaxonomyEntity> taxonomies;
     
     
     

@@ -75,6 +75,7 @@ public class JwtServiceImpl implements JwtService {
 
     private SecretKey getSigningKey() {  // ✅ changed Key -> SecretKey
         String secret = jwtSecret;
+        log.info("JWT " + secret);
         if (secret == null || secret.length() < 32) {
             throw new IllegalArgumentException("JWT_SECRET must be at least 32 characters long");
         }

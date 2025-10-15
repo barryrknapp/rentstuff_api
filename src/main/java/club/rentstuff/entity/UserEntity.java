@@ -57,14 +57,17 @@ public class UserEntity {
     @Column(name = "MODIFY_DATE")
     private LocalDateTime modifyDate;
 
+	@ToString.Exclude
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<RentalItemEntity> rentalItems = new ArrayList<>();
+    private List<RentalItemEntity> rentalItems;
 
+	@ToString.Exclude
     @OneToMany(mappedBy = "renter", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<BookingEntity> bookings = new ArrayList<>();
+    private List<BookingEntity> bookings;
     
+	@ToString.Exclude
     @OneToMany(mappedBy = "reviewedUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ReviewUserEntity> reviews = new ArrayList<>();
+    private List<ReviewUserEntity> reviews;
 
     @Column(name = "ROLE")
     private String role; // e.g., USER, ADMIN

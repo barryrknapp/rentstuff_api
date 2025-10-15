@@ -217,10 +217,12 @@ public class BookingServiceImpl implements BookingService {
         
         bookingRepository.delete(booking);
         
-        
-        notificationService.sendBookingDeletedToRenter(booking, owner);
-        notificationService.sendBookingDeletedToOwner(booking, owner);
-        
+        try {
+        	notificationService.sendBookingDeletedToRenter(booking, owner);
+        	notificationService.sendBookingDeletedToOwner(booking, owner);
+        }catch(Exception e) {
+        	log.error("Failed to email notification but booking was successfully deleted", e);
+        }
     }
 	
 	

@@ -17,7 +17,7 @@ import club.rentstuff.service.JwtService;
 import club.rentstuff.service.UserService;
 import io.jsonwebtoken.Jwts;
 
-@SpringBootTest
+//@SpringBootTest
 public class JwtServiceTest {
 	@Autowired
 	private JwtService jwtService;
@@ -25,7 +25,7 @@ public class JwtServiceTest {
 	private UserService userService;
 
 	//if you are setting up a new database, you can use this to generate a new JWT key
-//	@Test
+	@Test
 	void testGenerateNewSecret() {
 		
 
