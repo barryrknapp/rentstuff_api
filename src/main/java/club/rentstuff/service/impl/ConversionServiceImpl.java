@@ -72,6 +72,7 @@ public class ConversionServiceImpl implements ConversionService {
 		// Build RentalItemEntity without setting id (let database handle it)
 		RentalItemEntity entity = RentalItemEntity.builder().name(dto.getName()).description(dto.getDescription())
 				.minDays(dto.getMinDays()).maxDays(dto.getMaxDays()).owner(owner).taxonomies(taxonomies).paused(dto.getPaused())
+				.city(dto.getCity()).state(dto.getState()).zipCode(dto.getZipCode())
 				.createDate(LocalDateTime.now()).build();
 
 		List<RentalItemImageEntity> images = dto.getImageIds().stream()
@@ -115,12 +116,14 @@ public class ConversionServiceImpl implements ConversionService {
 				.prices(e.getPrices().stream().map(this::convertPriceEntity).collect(Collectors.toList()))
 				.createDate(e.getCreateDate()).modifyDate(e.getModifyDate())
 				.ownerId(e.getOwner() != null ? e.getOwner().getId() : null)
+				.latitude(e.getLatitude()).longitude(e.getLongitude())
 				.taxonomyIds(e.getTaxonomies().stream().map(t -> t.getId()).toList())
 				.unavailableDates(e.getUnavailableDates().stream()
 						.map(ud -> UnavailableDateDto.builder().id(ud.getId()).startDate(ud.getStartDate())
 								.itemId(e.getId()).endDate(ud.getEndDate()).build())
 						.collect(Collectors.toList()))
 				.minDays(e.getMinDays()).maxDays(e.getMaxDays())
+				.city(e.getCity()).state(e.getState()).zipCode(e.getZipCode())
 				.imageIds(e.getImages().stream().map(i -> i.getId()).collect(Collectors.toList()))
 				.averageRating(averageRating).build();
 

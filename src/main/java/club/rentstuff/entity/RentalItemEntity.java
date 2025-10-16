@@ -64,12 +64,22 @@ public class RentalItemEntity {
     
     @Column(name = "MAX_DAYS")
     private Integer maxDays;
-    
-    
+
+    @Column(name = "CITY")
+    private String city; 
+    @Column(name = "STATE")
+    private String state; 
+    @Column(name = "ZIPCODE")
+    private String zipCode; 
+    @Column(name = "LATITUDE")
+    private Double latitude;
+    @Column(name = "LONGITUDE")
+    private Double longitude;
     @ManyToOne
     @JoinColumn(name = "OWNER_ID", nullable = false)
     private UserEntity owner;
 
+    
     @OneToMany(mappedBy = "rentalItem", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RentalItemImageEntity> images;
     

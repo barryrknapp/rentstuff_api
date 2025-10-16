@@ -18,6 +18,7 @@ import club.rentstuff.entity.RentalItemEntity;
 import club.rentstuff.entity.RentalItemImageEntity;
 import club.rentstuff.entity.UnavailableDateEntity;
 import club.rentstuff.entity.UserEntity;
+import club.rentstuff.model.LatLong;
 import club.rentstuff.model.PriceCalculationDto;
 import club.rentstuff.model.PriceDto;
 import club.rentstuff.model.RentalItemDto;
@@ -30,6 +31,7 @@ import club.rentstuff.repo.UnavailableDateRepo;
 import club.rentstuff.repo.UserRepo;
 import club.rentstuff.service.AuthService;
 import club.rentstuff.service.ConversionService;
+import club.rentstuff.service.LatLongService;
 import club.rentstuff.service.RentalItemService;
 import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
@@ -62,6 +64,9 @@ public class RentalItemServiceImpl implements RentalItemService {
 	@Autowired
 	private UserRepo userRepo;
 
+	@Autowired
+	private LatLongService latLongService;
+	
 	/**
 	 * calculates total price for a given number of days days*price
 	 */
@@ -235,6 +240,13 @@ public class RentalItemServiceImpl implements RentalItemService {
 
 		RentalItemEntity entity = conversionService.convertRentalItemDto(itemDto);
 
+		if (entity.getZipCode() != null && !entity.getZipCode().isEmpty()) {
+            LatLong latLong = latLongService.getLatLong(entity.getZipCode());
+            entity.setLatitude(latLong.getLatitude());
+            entity.setLongitude(latLong.getLongitude());
+        }
+        
+		
 		RentalItemEntity savedItem = repository.save(entity);
 
 		// Save images
@@ -270,14 +282,25 @@ public class RentalItemServiceImpl implements RentalItemService {
 			throw new IllegalStateException("Unauthorized to modify this item");
 		}
 
+		if (itemDto.getZipCode() != null && !itemDto.getZipCode().equals(entity.getZipCode())) {
+            LatLong latLong = latLongService.getLatLong(itemDto.getZipCode());
+            entity.setLatitude(latLong.getLatitude());
+            entity.setLongitude(latLong.getLongitude());
+        }
+		
 		// Update scalar fields
 		entity.setName(itemDto.getName());
 		entity.setDescription(itemDto.getDescription());
 		entity.setMinDays(itemDto.getMinDays());
 		entity.setMaxDays(itemDto.getMaxDays());
 		entity.setPaused(itemDto.getPaused());
+		entity.setCity(itemDto.getCity());
+		entity.setState(itemDto.getState());
+		entity.setZipCode(itemDto.getZipCode());
 		entity.setTaxonomies(taxonomyRepo.findAllById(itemDto.getTaxonomyIds()));
 
+		
+		
 		// Add new images (existing images are managed via delete endpoint)
 		List<RentalItemImageEntity> imageEntities = new ArrayList<>();
 		if (images != null && !images.isEmpty()) {

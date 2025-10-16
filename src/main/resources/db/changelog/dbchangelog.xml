@@ -18,6 +18,9 @@
 	<include file="sql/3.0-taxonomies.xml"
 		relativeToChangelogFile="true" />
 
+	<include file="sql/4.0-item_location.xml"
+		relativeToChangelogFile="true" />
+
 
 
 </databaseChangeLog> 

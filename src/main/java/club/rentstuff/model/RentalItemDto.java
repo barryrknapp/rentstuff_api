@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -35,6 +36,12 @@ public class RentalItemDto {
 	private LocalDateTime modifyDate;
 	private Long ownerId;
     private Boolean paused;
+    private String city; 
+    private String state; 
+    private String zipCode;
+    private Double latitude;
+    private Double longitude;
+
 	@Builder.Default
 	private List<Long> taxonomyIds = new ArrayList<>();
 	private Double averageRating; // Optional: Computed from reviews
