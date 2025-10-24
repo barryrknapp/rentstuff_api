@@ -83,8 +83,8 @@ public class RentalItemServiceImpl implements RentalItemService {
 			throw new IllegalStateException("Pickup date and time must be now or later");
 		}
 
-		// Calculate days (ceiling to account for partial days)
-		long days = (long) Math.ceil(ChronoUnit.HOURS.between(startDateTime, endDateTime) / 24.0);
+		long days = ChronoUnit.DAYS.between(startDateTime.toLocalDate(), endDateTime.toLocalDate());
+				
 		if (days < item.getMinDays()) {
 			throw new IllegalStateException("Rental duration must be at least " + item.getMinDays() + " days");
 		}
