@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
+
+	<changeSet id="001-create-marketing-table" author="barry">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<tableExists tableName="MARKETING" />
+			</not>
+		</preConditions>
+
+		<!-- Create Sequence -->
+
+		<createSequence sequenceName="marketing_id_seq"
+			startValue="1" incrementBy="1" />
+
+		<!-- Create Table -->
+		<createTable tableName="MARKETING">
+			<column name="ID" type="BIGINT">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="COMPANY_NAME" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="DOMAIN" type="VARCHAR(100)">
+				<constraints nullable="false" unique="true" />
+			</column>
+			<column name="WEBSITE" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CATEGORY" type="VARCHAR(100)">
+				<constraints nullable="false" />
+			</column>
+			<column name="FOCUS_KEYWORD" type="VARCHAR(100)">
+				<constraints nullable="false" />
+			</column>
+			<column name="X_API_KEY" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="X_API_SECRET" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="X_ACCESS_TOKEN" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="X_ACCESS_TOKEN_SECRET" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="X_BEARER_TOKEN" type="TEXT">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+
+
+	</changeSet>
+
+</databaseChangeLog>

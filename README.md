@@ -73,6 +73,8 @@ DB_HOST localhost
 # Now you can run the application for the first time and it will connect to the database and automatically create the tables.  
 
 Open a browser to http://localhost:8081/api/swagger-ui/index.html
+or http://localhost:8081/rentstuff/swagger-ui/index.html
+
 
 
 # Now that the tables are created you can go back into pgadmin and expand the Kong -- RENTSTUFF_API database 

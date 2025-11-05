@@ -22,5 +22,9 @@
 		relativeToChangelogFile="true" />
 
 
+	<include file="sql/5.0-marketing.xml"
+		relativeToChangelogFile="true" />
+
+
 
 </databaseChangeLog> 

@@ -30,6 +30,7 @@ public class SecurityConfig {
 					    .requestMatchers("/rentstuff/rentalitems/images/**").permitAll()
 					    .requestMatchers("/taxonomies/**").permitAll()
 						.requestMatchers("/auth/**").permitAll()
+						.requestMatchers("/marketing/**").permitAll()
 						.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
 						.requestMatchers("/secureadmin/**").hasRole("ADMIN").anyRequest().authenticated()
 
