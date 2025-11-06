@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,11 @@ public class MarketingAgentSchedule {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final ExecutorService executor = Executors.newFixedThreadPool(4); // Limit concurrent jobs
+    
+	
+	@Value("${rentstuff.autogen.dir}")
+	private String autogenDir;
+    
 
     @Autowired
     private MarketingRepo marketingRepo;
@@ -55,13 +61,14 @@ public class MarketingAgentSchedule {
         log.info("Starting marketing job for: {}", companyName);
 
         
-        String quotedJson = "\"" + jsonPayload.replace("\"", "\\\"") + "\"";
+        
+        String quotedJson =  "\"" + jsonPayload.replace("\"", "\\\"") + "\"";
 
         ProcessBuilder pb = new ProcessBuilder(
-            "python", "marketingagent.py", quotedJson
+            "python", "marketingagent.py", autogenDir.contains("opt") ? jsonPayload : quotedJson
         );
         
-        pb.directory(new File("C:/Users/barry/workspaces/autogen"));
+        pb.directory(new File(autogenDir));
 
         try {
             Process process = pb.start();

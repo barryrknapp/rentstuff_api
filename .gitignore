@@ -1,3 +1,4 @@
+autogen/
 deploy.sh
 secrets_ignore
 HELP.md
