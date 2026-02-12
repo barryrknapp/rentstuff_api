@@ -25,6 +25,8 @@
 	<include file="sql/5.0-marketing.xml"
 		relativeToChangelogFile="true" />
 
+	<include file="sql/6.0-facebook_access_token.xml"
+		relativeToChangelogFile="true" />
 
 
 </databaseChangeLog> 

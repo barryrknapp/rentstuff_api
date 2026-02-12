@@ -17,7 +17,7 @@ ARG JAR_FILE=target/rentstuff_api-0.0.1-SNAPSHOT.jar
 COPY ${JAR_FILE} app.jar
 
 # === Copy Python code ===
-COPY autogen/ ./autogen/
+COPY rentstuff_marketing/ ./autogen/
 
 # === Install PyTorch + diffusers + requirements (NO WGET) ===
 RUN python3 -m venv /opt/venv && \

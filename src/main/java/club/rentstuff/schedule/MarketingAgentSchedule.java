@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import club.rentstuff.entity.MarketingEntity;
 import club.rentstuff.model.MarketingRequestDto;
+import club.rentstuff.model.MarketingRequestDto.FacebookCredentials;
 import club.rentstuff.model.MarketingRequestDto.TwitterCredentials;
 import club.rentstuff.repo.MarketingRepo;
 import lombok.extern.log4j.Log4j2;
@@ -30,8 +31,8 @@ import lombok.extern.log4j.Log4j2;
 public class MarketingAgentSchedule {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private final ExecutorService executor = Executors.newFixedThreadPool(4); // Limit concurrent jobs
-    
+//    private final ExecutorService executor = Executors.newFixedThreadPool(4); // Limit concurrent jobs
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();  
 	
 	@Value("${rentstuff.autogen.dir}")
 	private String autogenDir;
@@ -58,12 +59,11 @@ public class MarketingAgentSchedule {
     }
 
     private void runPythonScript(String companyName, String jsonPayload) {
-        log.info("Starting marketing job for: {}", companyName);
 
-        
-        
         String quotedJson =  "\"" + jsonPayload.replace("\"", "\\\"") + "\"";
 
+        log.info("Starting marketing job for: {} with json: {}", companyName, quotedJson);
+        
         ProcessBuilder pb = new ProcessBuilder(
             "python", "marketingagent.py", autogenDir.contains("opt") ? jsonPayload : quotedJson
         );
@@ -80,7 +80,7 @@ public class MarketingAgentSchedule {
             CompletableFuture.runAsync(errorGobbler);
 
             // OPTIONAL: Timeout after 30 minutes
-            boolean finished = process.waitFor(30, TimeUnit.MINUTES);
+            boolean finished = process.waitFor(60, TimeUnit.MINUTES);
             if (finished) {
                 int exitCode = process.exitValue();
                 log.info("Marketing job completed for {} with exit code: {}", companyName, exitCode);
@@ -125,6 +125,7 @@ public class MarketingAgentSchedule {
             .website(ent.getWebsite())
             .category(ent.getCategory())
             .focusKeyword(ent.getFocusKeyword())
+            .facebook(FacebookCredentials.builder().accessToken(ent.getFacebookAccessToken()).build())
             .twitter(TwitterCredentials.builder()
                 .apiKey(ent.getXApiKey())
                 .apiSecret(ent.getXApiSecret())
@@ -138,7 +139,8 @@ public class MarketingAgentSchedule {
     }
 
     // Optional: Schedule all
-    @Scheduled(fixedRate = 24 * 60 * 60 * 1000) // Daily
+//    @Scheduled(fixedRate = 24 * 60 * 60 * 1000) // Daily
+    @Scheduled(cron = "0 0 12 * * ?", zone = "America/New_York")
     public void runAllDaily() {
         marketingRepo.findAll().forEach(ent -> triggerMarketingAsync(ent.getId()));
     }

@@ -63,5 +63,11 @@ public class MarketingEntity {
 
 	@Column(name = "X_BEARER_TOKEN")
 	private String xBearerToken;
+	
+
+	@Column(name = "FACEBOOK_ACCESS_TOKEN")
+	private String facebookAccessToken;
+	
+	
 
 }

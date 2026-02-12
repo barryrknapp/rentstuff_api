@@ -18,6 +18,16 @@ public class MarketingController {
 	@Autowired
     private MarketingAgentSchedule agentService;
 
+    @PostMapping("/trigger/all")
+    public ResponseEntity<Map<String, String>> runDaily() {
+        agentService.runAllDaily();
+        return ResponseEntity.accepted()
+            .body(Map.of(
+                "status", "queued",
+                "message", "Marketing generation started"
+            ));
+    }
+	
     @PostMapping("/trigger/{id}")
     public ResponseEntity<Map<String, String>> triggerMarketing(@PathVariable Long id) {
         agentService.triggerMarketingAsync(id);

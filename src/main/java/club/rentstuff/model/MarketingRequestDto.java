@@ -36,6 +36,19 @@ public class MarketingRequestDto {
  @JsonProperty("twitter")
  TwitterCredentials twitter;
 
+ @NotNull
+ @JsonProperty("facebook")
+ FacebookCredentials facebook;
+ // Nested static class for Twitter credentials
+ @Value
+ @Builder
+ public static class FacebookCredentials {
+     @NotBlank
+     @JsonProperty("access_token")
+     String accessToken;
+
+ }
+ 
  // Nested static class for Twitter credentials
  @Value
  @Builder
