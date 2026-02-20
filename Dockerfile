@@ -1,37 +1,33 @@
 FROM eclipse-temurin:17-jre-jammy
 
-# === Install Python 3.11 + venv + wget (optional) ===
+# Install Python 3.11 + venv
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         python3.11 \
         python3.11-venv \
-        python3.11-distutils \
+        python3-pip \
     && rm -rf /var/lib/apt/lists/* \
     && ln -sf /usr/bin/python3.11 /usr/bin/python \
     && ln -sf /usr/bin/python3.11 /usr/bin/python3
 
 WORKDIR /opt/app
 
-# === Copy JAR ===
+# Copy JAR
 ARG JAR_FILE=target/rentstuff_api-0.0.1-SNAPSHOT.jar
 COPY ${JAR_FILE} app.jar
 
-# === Copy Python code ===
+# Copy Python code
 COPY rentstuff_marketing/ ./autogen/
 
-# === Install PyTorch + diffusers + requirements (NO WGET) ===
+# Create venv and install ALL dependencies in one go (no duplicates)
 RUN python3 -m venv /opt/venv && \
-    /opt/venv/bin/pip install --upgrade pip && \
+    /opt/venv/bin/pip install --upgrade pip && \   
+    /opt/venv/bin/pip install --no-cache-dir "numpy<2.0"  huggingface_hub==0.22.2 && \    
     /opt/venv/bin/pip install --no-cache-dir \
-        torch==2.4.1+cpu torchvision==0.19.1+cpu \
-        --index-url https://download.pytorch.org/whl/cpu && \
-    /opt/venv/bin/pip install --no-cache-dir diffusers==0.30.3 && \
-    /opt/venv/bin/pip install --no-cache-dir transformers && \
-    /opt/venv/bin/pip install --no-cache-dir accelerate && \
-    /opt/venv/bin/pip install --no-cache-dir ddgs && \
-    /opt/venv/bin/pip install --no-cache-dir -r autogen/requirements.txt
-        
-
+        torch==2.1.0+cpu torchvision==0.16.0+cpu torchaudio==2.1.0+cpu \
+        --index-url https://download.pytorch.org/whl/cpu \
+    && /opt/venv/bin/pip install --no-cache-dir diffusers==0.26.3 transformers==4.36.2 accelerate==0.25.0 langchain langchain-openai langchain-community langgraph tweepy pillow python-dotenv ddgs \
+        -r autogen/requirements.txt
 ENV PATH="/opt/venv/bin:$PATH"
 ENV PYTORCH_ENABLE_MPS_FALLBACK=1
 ENV CUDA_VISIBLE_DEVICES=""
